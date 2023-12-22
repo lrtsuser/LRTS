@@ -40,7 +40,7 @@ Average statistics on the FAILED test suites by project (TC means test class, TM
 
 
 
-You can download LRTS from Zenodo.org. Please see `DATA.md`
+You can download LRTS from Zenodo.org. Please see `dataset/DATA.md`
 
 The LRTS dataset is organized as:
 
