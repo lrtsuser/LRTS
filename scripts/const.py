@@ -125,13 +125,6 @@ PATCH_DIR = "patch"
 # store the trunk...diff data
 DIFF_DIR = "diff"
 
-# omin_init contains build stats, and trunk pr head sha, enough to collect test results
-OMIN_INIT_FILE = os.path.join(metadir, "omin_init.csv")
-# compared with omin_init, this contains accurate test result metadata per build
-OMIN_FILE = os.path.join(metadir, "omin.csv")
-# compared with omin, this contains filter test metadata per build
-OMIN_FILTER_FILE = os.path.join(metadir, "omin_filter.csv")
-
 
 # test case status
 # https://javadoc.jenkins.io/plugin/junit/hudson/tasks/junit/CaseResult.Status.html
