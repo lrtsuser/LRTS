@@ -38,9 +38,9 @@ Average statistics on the FAILED test suites by project (TC means test class, TM
 | [Log4j 2](https://github.com/apache/logging-log4j2) | 641 | 3 | 3,918 | 4 | 0.25 |
 | [TVM](https://github.com/apache/tvm) | 526 | 3 | 8,564 | 37 | 4.83 |
 
-## Dataset
+## Data
 
-You can download LRTS from Zenodo.org. Please see `dataset/DATA.md`
+You can download LRTS from Zenodo.org. Please see `data/DATA.md`
 
 The LRTS dataset is organized as:
 
