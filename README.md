@@ -8,7 +8,7 @@ LRTS curates historical CI builds with real CI failures from GitHub and Jenkins 
 *We are including more collected builds and updating our docs/scripts. Please stay tune for more updates.*
 
 | **Project** | **Software domain** | **Main PLs** | **Period (days)** | **#CI builds** | **#Test suite runs** | **#Failed test suite runs** |
-|---|---|---|---|---|---|---|
+|---|---|---:|---:|---:|---:|---:|
 | [ActiveMQ](https://github.com/apache/activemq) | Message broker | Java | 827 | 207 | 207 | 109 |
 | [Hadoop](https://github.com/apache/hadoop) | Big-data processing | Java | 1,094 | 1,299 | 1,299 | 543 |
 | [HBase](https://github.com/apache/hbase) | Big-data storage | Java | 504 | 278 | 553 | 215 |
@@ -26,7 +26,7 @@ LRTS curates historical CI builds with real CI failures from GitHub and Jenkins 
 Average statistics on the FAILED test suites by project (TC means test class, TM means test method):
 
 | **Project** | **Avg #TC** | **Avg #Failed TC** | **Avg #TM** | **Avg #Failed TM** | **Avg duration (hours)** |
-|---|---|---|---|---|---|
+|---|---:|---:|---:|---:|---:|
 | [ActiveMQ](https://github.com/apache/activemq) | 676 | 3 | 6,081 | 34 | 4.36 |
 | [Hadoop](https://github.com/apache/hadoop) | 829 | 6 | 7,289 | 24 | 5.57 |
 | [HBase](https://github.com/apache/hbase) | 1,061 | 2 | 6,369 | 3 | 9.28 |
