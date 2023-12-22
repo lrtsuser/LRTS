@@ -3,7 +3,7 @@
 
 LRTS is an extensive, large-scale dataset for test prioritization research.
 
-LRTS curates historical CI builds with real CI failures from GitHub and Jenkins CI. LRTS currently has 21K CI builds with 57K test-suite runs from 10 popular, large- scale open-source projects. Builds span 2020 to 2023.
+LRTS curates historical CI builds with real CI failures from GitHub and Jenkins CI. LRTS currently has 21K CI builds with 57K test-suite runs from 10 popular, large- scale open-source projects. Builds span from 2020 to 2023.
 
 *We are including more collected builds and updating our docs/scripts. Please stay tune for more updates.*
 
