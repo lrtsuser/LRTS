@@ -3,6 +3,8 @@
 
 We provide open access to LRTS on Zenodo.org. Due to size limit, it is put into multiple zip files. Download all zip files and decompress to get the entire dataset (~60GB).
 
+*We are currently in the processing of putting all the data on Zenodo, due to its large size/scale, it may take a while to process. Please check back in a while*
+
 [LRTS: Dataset of Long-Running Test Suites (Part 1)](https://zenodo.org/records/10421200)
 
 [LRTS: Dataset of Long-Running Test Suites (Part 2)](https://zenodo.org/records/10421091)
