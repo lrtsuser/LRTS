@@ -13,3 +13,12 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 - Average test-suite run duration: 6.75 *hours*, with >75% runs last over 2 hours
 - Average number of executed test class per run: 980
 - Average number of failed test class per failed run: 5 
+
+
+## Dataset
+
+Go to [this link](https://drive.google.com/file/d/1sx763uvJflRZn_n3xhDRrB-E7FodRMig/view?usp=sharing) to download the processed LRTS. It contains the metadata, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs. 
+
+## Scripts
+
+`scripts` folder contains our code for continuing download more test-suite runs from the curated project. 
