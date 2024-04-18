@@ -3,7 +3,7 @@
 
 LRTS is the first, extensive dataset for test-case prioritization (TCP) focused on **long-running test suites**.
 
-LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failures**, from **recent codebases** of 10 popular, large-scale, multi-PL, multi-module, **open-source software projects**: ActiveMQ, Hadoop, HBase, Hive, Jackrabbit Oak, James, Kafka, Karaf, Log4j 2, TVM.
+LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failures**, from **recent codebases** of 10 popular, large-scale, multi-PL, multi-module, **open-source software projects**: [ActiveMQ](https://github.com/apache/activemq), [Hadoop](https://github.com/apache/hadoop), [HBase](https://github.com/apache/hbase), [Hive](https://github.com/apache/hive), [Jackrabbit Oak](https://github.com/apache/jackrabbit-oak), [James](https://github.com/apache/james-project), [Kafka](https://github.com/apache/kafka), [Karaf](https://github.com/apache/karaf), [Log4j 2](https://github.com/apache/logging-log4j2), [TVM](https://github.com/apache/tvm).
 
 
 ### Key Statistics
