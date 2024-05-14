@@ -416,7 +416,6 @@ def calculate_dataset_variant_stats():
 def extract_filtered_tests_for_builds():
     """get the to be filtered tests in each filter for each build"""
     omin = pd.read_csv(const.OMIN_FILE)
-    omin = omin[omin["project"] == const.TVM]
     omin = omin[["project", "pr_name", "build_id", "stage_id"]].values.tolist()
     filters = [eval_const.FILTER_JIRA, eval_const.FILTER_STAGEUNIQUE, 
                eval_const.FILTER_FREQFAIL, eval_const.FILTER_FIRST]
