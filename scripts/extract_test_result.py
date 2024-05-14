@@ -38,9 +38,6 @@ def get_test_method_results(filepath):
             suite_duration = suite["duration"]
             classname_from_suite = suite["name"]
             enclosing_blockname = parse_enclosing_blockname(suite["enclosingBlockNames"])
-
-            # if is_not_test_class(suite_classname):
-            #     continue
             
             if "cases" in suite:
                 for case in suite["cases"]:

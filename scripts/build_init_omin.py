@@ -3,18 +3,6 @@ import pandas as pd
 
 import const
 
-# def check_has_head_commit_data(project, pr_name, build_id, head):
-#     fpath = os.path.join(const.shadir, project, const.SINGLE_DIR, 
-#                          f"{pr_name}_build{build_id}", f"{head}_page1.json")
-#     if os.path.exists(fpath):
-#         with open(fpath) as f:
-#             data = json.load(f)
-#             if "message" in data and "No commit found for SHA" in data["message"]:
-#                 return False
-#             elif "sha" in data:
-#                 return True
-#     return False
-
 def check_has_trunk_head_diff_data(project, pr_name, build_id, base, head):
     fpath = os.path.join(const.shadir, project, const.COMPARE_DIR, 
                          f"{pr_name}_build{build_id}", f"{base}_{head}_page1.json")

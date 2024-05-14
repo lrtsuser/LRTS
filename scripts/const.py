@@ -25,15 +25,15 @@ LOG4J = "log4j"
 
 PROJECTS = [
     ACTIVEMQ,
-    HADOOP,
-    HBASE,
-    HIVE,
-    JACK,
-    JAMES,
-    KAFKA,
-    KARAF,
-    LOG4J,
-    TVM,
+    # HADOOP,
+    # HBASE,
+    # HIVE,
+    # JACK,
+    # JAMES,
+    # KAFKA,
+    # KARAF,
+    # LOG4J,
+    # TVM,
 ]
 
 PROJECT_PRETTY = {
