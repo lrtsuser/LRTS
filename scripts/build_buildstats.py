@@ -4,6 +4,7 @@ import pandas as pd
 import glob
 import multiprocessing as mp
 import zipfile
+import numpy as np
 from datetime import datetime
 
 import const
@@ -18,7 +19,7 @@ def get_build_head_sha(builddata, pr_name):
     actions = builddata["actions"]
     sha = None
     for action in actions:
-        if "buildsByBranchName" in action and pr_name in action["buildsByBranchName"]:
+        if action and "buildsByBranchName" in action and action["buildsByBranchName"] and pr_name in action["buildsByBranchName"]:
             sha = action["buildsByBranchName"][pr_name]["revision"]["branch"][0]["SHA1"]
             break
     return sha

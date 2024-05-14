@@ -101,7 +101,7 @@ def get_pr_data(project, pr, pr_url):
             # only collect test data if there is test result for this build
             if len(build_info) > 0 and "actions" in build_info:
                 for action in build_info["actions"]:
-                    if "urlName" in action and action["urlName"] == "testReport":
+                    if action and "urlName" in action and action["urlName"] and action["urlName"] == "testReport":
                         # if "failCount" in action and action["failCount"] > 0:
                         test_query_url = build_url + "testReport/api/json"
                         test_file = f"{prdir}/testReport_build{build_number}.json"

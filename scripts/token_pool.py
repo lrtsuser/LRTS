@@ -3,7 +3,9 @@ import requests
 
 class TokenPool:
     def __init__(self):
-        self.tokens = ["PUT_YOUR_TOKEN_HERE"]
+        self.tokens = [
+            # PUT GITHUB TOKENS HERE
+        ]
         self.token_queues = self.init_token_queue()
 
     def generate_headers(self, token):

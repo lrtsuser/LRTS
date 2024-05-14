@@ -33,7 +33,7 @@ def tvm_corner_case(content):
 
 
 def get_trunk_sha_via_build_log_regex_corner_case(project, content):
-    if project in [const.TVM, const.TVM_GPU]:
+    if project.startswith(const.TVM):
         return tvm_corner_case(content)
     return []
 
