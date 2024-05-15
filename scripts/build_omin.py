@@ -62,7 +62,7 @@ def process_test_result(project, pr_name, build_id):
     rows = []
     for stage_class_csv_file in stage_class_csv_files:
         stage = stage_class_csv_file.split("/")[-2].replace("stage_", "")
-        if project in [const.TVM, const.TVM_GPU]:
+        if project.startswith(const.TVM):
             stage_method_df = df if stage == "single" else df[df["stage_id"].str.contains(stage)]
         else:
             stage_method_df = df if stage == "single" else df[df["stage_id"] == stage]
