@@ -1,4 +1,3 @@
-# source: https://bitbucket.org/HelgeS/retecs/src/master/
 import numpy as np
 import os
 import sys

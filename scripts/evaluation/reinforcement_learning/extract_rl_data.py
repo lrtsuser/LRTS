@@ -1,4 +1,3 @@
-# source: https://bitbucket.org/HelgeS/retecs/src/master/
 import multiprocessing as mp
 import pandas as pd
 import os
