@@ -102,11 +102,6 @@ class TestPrioritization:
             
 
         # load feature file
-        # if self.tcp.startswith("limhist"):
-        #     window_size = self.tcp.split("_")[0].replace("limhist", "")
-        #     fpath = os.path.join(feature_dir, "window_history", 
-        #                          eval_const.TEMPHIST_FILE.format(window_size=window_size))
-        #     self.tcp = "_".join(self.tcp.split("_")[1:])
         if self.tcp.startswith("IR"):
             ir_file = eval_const.IRSCORE_TFIDF_FILE if self.tcp.endswith("_tfidf") else eval_const.IRSCORE_BM25_FILE
             fpath = os.path.join(feature_dir, ir_file)

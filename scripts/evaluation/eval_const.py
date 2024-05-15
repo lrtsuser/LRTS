@@ -90,7 +90,7 @@ TF_TRANSFREQ_TCP = "TestFile_TransFreq"
 # ranking tests in descending order by the max co-occurance (test, file) transition frequency (relative)
 TF_TRANSFREQ_REL_TCP = "TestFile_TransFreq_Rel"
 
-
+# information retrieval TCP
 IR_NOCONTEXT_TCP = "IR_0Context"
 IR_DIFF_TCP = "IR_GitDiff"
 IR_WHOLEFILE_TCP = "IR_WholeFile"
@@ -99,14 +99,14 @@ IR_NOCONTEXT_TFIDF_TCP = "IR_0Context_tfidf"
 IR_DIFF_TFIDF_TCP = "IR_GitDiff_tfidf"
 IR_WHOLEFILE_TFIDF_TCP = "IR_WholeFile_tfidf"
 
-
+# supervised learning TCP
 ML1_TCP = "ML_f1"
 ML2_TCP = "ML_f2"
 ML3_TCP = "ML_f3"
 ML4_TCP = "ML_f4"
 MLALL_TCP = "ML_fall"
 
-
+# reinforcement learning TCP
 RL_TAB_FC_TCP = "RL_tableau_failcount"
 RL_TAB_TC_TCP = "RL_tableau_tcfail"
 RL_TAB_TR_TCP = "RL_tableau_timerank"
@@ -158,13 +158,12 @@ BASIC_TCPS = [
 ]
 
 
-# More advance RTP
 EVAL_TCPS = BASIC_TCPS.copy() + RL_TCPS.copy()
 # EVAL_TCPS = []
-# run time-break tie RTP
+# cost-cognizant hybrid, score / time TCP
 EVAL_TCPS += ["cbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, QTF_TCP] + RL_TCPS]
 
-# run failure count / time-break tie RTP
+# cost-cognizant hybrid, score * failure count / time TCP
 EVAL_TCPS += ["hcbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, FC_TCP, QTF_TCP] + RL_TCPS]
 
 
