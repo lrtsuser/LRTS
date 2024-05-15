@@ -129,8 +129,6 @@ BASIC_TCPS = [
     
     QTF_TCP,
     QTF_AVG_TCP,
-    # LTF_TCP,
-    # LTF_AVG_TCP,
 
     LF_TCP,
     FC_TCP,
@@ -138,9 +136,7 @@ BASIC_TCPS = [
     TC_TCP,
 
     TF_FAILFREQ_TCP,
-    # TF_FAILFREQ_REL_TCP,
     TF_TRANSFREQ_TCP,
-    # TF_TRANSFREQ_REL_TCP,
     
     IR_NOCONTEXT_TCP,
     IR_DIFF_TCP,
@@ -181,7 +177,6 @@ METRIC_NAMES = [
     "APTDc_sameBug_uniqueFix",
     "APTDc_uniqueBug_sameFix",
     "APTDc_uniqueBug_uniqueFix",
-    # "NRPA",
     # "TTFF", "TTAF", "NTFF", "NTAF", "TotalTime", "TotalTest"
 ]
 

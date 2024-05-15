@@ -34,7 +34,7 @@ def construct_testrun_objects(project, pr_name, build_id, stage_id):
 
 
 def eval_tcp_on_build(project, tcp, pr_name, build_id, stage_id, index,
-                      filters, save_ordered_tests=True, use_ordered_tests=True):
+                      filters, save_ordered_tests=False, use_ordered_tests=False):
     """
     evaluate a tcp on a test run, return seed -> metric value 
     {
