@@ -10,7 +10,6 @@ eval_dir = os.path.join(script_dir, "..")
 sys.path.append(main_dir)
 sys.path.append(eval_dir)
 
-import eval_const
 import const
 import agents
 import retecs
@@ -98,38 +97,6 @@ def run_rl_on_project(project):
     
     pool = mp.Pool(mp.cpu_count())
     pool.starmap(run_rl_on_project_stage, args)
-
-
-# def aggregate_rl_data_helper(project, pr_name, build_id, stage_id):
-#     print("processing", project, pr_name, build_id, stage_id)
-#     input_dir = os.path.join(
-#         eval_const.rldatadir, project, f"{pr_name}_build{build_id}", "stage_" + stage_id)
-#     output_dir = os.path.join(
-#         eval_const.feadir, project, f"{pr_name}_build{build_id}", "stage_" + stage_id, eval_const.rl_feature_dir)
-#     os.makedirs(output_dir, exist_ok=True)
-#     for agent_name, preproc_name in AGENT_AND_PREPROC_NAMES:
-#         for reward_name in REWARD_NAMES:
-#             # merge per seed dfs into one df for each (stage, build)
-#             # put the merged df into features dir
-#             merged_df = pd.DataFrame()
-#             for seed in SEEDS:
-#                 seed_df = pd.read_csv(
-#                     os.path.join(input_dir, eval_const.RL_FILE.format(agent_name, reward_name, seed)))
-#                 seed_df = seed_df.rename(columns={"CalcPrio": f"rl_prio_s{seed}", "Name": "testclass"})
-#                 merged_df = pd.merge(merged_df, seed_df, how="left", on=["testclass"]) if seed > 0 else seed_df
-#                 merged_df = merged_df.round(8)
-#             merged_df.to_csv(
-#                 os.path.join(output_dir, eval_const.RL_PRIO_FILE.format(agent_name, reward_name)), index=False)
-
-
-# def aggregate_rl_data(project):
-#     df = pd.read_csv(const.OMIN_FILE)
-#     df = df[df["project"] == project]
-    
-#     # get all (stage, build)s
-#     args = df[["project", "pr_name", "build_id", "stage_id"]].values.tolist()
-#     pool = mp.Pool(mp.cpu_count())
-#     pool.starmap(aggregate_rl_data_helper, args)
 
 
 if __name__ == "__main__":
