@@ -63,7 +63,7 @@ def run_rl_on_project_stage(project, stage_id, agent_name, preproc_name, reward_
     preprocessor = get_preproc_by_name(preproc_name)
     
     # load builds of this stage in this project
-    stage_df = pd.read_csv(const.OMIN_FILE)
+    stage_df = pd.read_csv(const.DATASET_FILE)
     stage_df = stage_df[(stage_df["project"] == project) & (stage_df["stage_id"] == stage_id)]
     # sort the build from oldest to latest
     stage_df = stage_df.sort_values("build_timestamp", ascending=True)
@@ -82,7 +82,7 @@ def run_rl_on_project_stage(project, stage_id, agent_name, preproc_name, reward_
 
 
 def run_rl_on_project(project):
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     
     # each stage/job has a seperate history, hence each stage has a seperate ai agent

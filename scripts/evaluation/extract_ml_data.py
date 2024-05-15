@@ -47,7 +47,7 @@ def display_split_statistics(project, training_set, testing_set):
 
 def get_train_test_split(split=0.75):
     # split is relative all builds
-    df = pd.read_csv(os.path.join(const.metadir, const.OMIN_FILE))
+    df = pd.read_csv(os.path.join(const.metadir, const.DATASET_FILE))
     for project in const.PROJECTS:
         training_sets, testing_sets = [], []
         project_df = df[df["project"] == project]
@@ -94,7 +94,7 @@ def get_ml_dataset(project):
     - Stage ID (the same test testing the same change under different stage (JDK 8 vs 11) may have different results)
     """
     # gather features to build ml dataset
-    df = pd.read_csv(os.path.join(const.metadir, const.OMIN_FILE))
+    df = pd.read_csv(os.path.join(const.metadir, const.DATASET_FILE))
     df = df[df["project"] == project]
     stage_id_enums = get_stage_id_enums(df)
     df = df[["pr_name", "build_id", "stage_id"]].values.tolist()
@@ -222,7 +222,7 @@ def predict_prob_helper(project, pr_name, build_id, stage_id):
 def predict_prob(project):
     """perform prediction on testing data"""
     # load to be predicted builds
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     # predict only failed or transitioned builds in testing split
     df = eval_main.filter_builds(df, [])

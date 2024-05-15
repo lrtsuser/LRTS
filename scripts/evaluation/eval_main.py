@@ -140,7 +140,7 @@ def eval_tcp_on_project(project, tcp, filters):
     """
 
     # load to be evaluated builds
-    df = pd.read_csv(const.OMIN_FILTER_FILE)
+    df = pd.read_csv(const.DATASET_FILTER_FILE)
     df = df[df["project"] == project]
     df = filter_builds(df, filters)
     

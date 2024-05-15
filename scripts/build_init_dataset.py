@@ -55,7 +55,7 @@ def get_init_omin_file():
     """
     dfs = [get_init_omin_file_per_project(x) for x in const.PROJECTS]
     df = pd.concat(dfs, axis=0)
-    df.to_csv(const.OMIN_INIT_FILE, index=False)
+    df.to_csv(const.DATASET_INIT_FILE, index=False)
 
 
 if __name__ == "__main__":

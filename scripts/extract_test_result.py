@@ -76,7 +76,7 @@ def extract_test_method_results_per_project(project):
     """extract test results at method level into csv"""
     os.makedirs(os.path.join(eval_const.trdir, project), exist_ok=True)
 
-    df = pd.read_csv(const.OMIN_INIT_FILE)
+    df = pd.read_csv(const.DATASET_INIT_FILE)
     df = df[df["project"] == project]
     args = df[["project", "pr_name", "build_id"]].values.tolist()
     pool = mp.Pool(mp.cpu_count())
@@ -194,7 +194,7 @@ def extract_test_class_results_per_project(project):
     """extract test class results from test method level csvs"""
     os.makedirs(os.path.join(eval_const.trdir, project), exist_ok=True)
 
-    df = pd.read_csv(const.OMIN_INIT_FILE)
+    df = pd.read_csv(const.DATASET_INIT_FILE)
     df = df[df["project"] == project]
     args = df[["project", "pr_name", "build_id"]].values.tolist()
     
@@ -205,7 +205,7 @@ def extract_test_class_results_per_project(project):
 
 
 def amend_last_outcome(project):
-    df = pd.read_csv(const.OMIN_INIT_FILE)
+    df = pd.read_csv(const.DATASET_INIT_FILE)
     df = df[df["project"] == project]
     df = df[df["build_timestamp"].notnull()]
     # sort tests from oldest to latest

@@ -19,7 +19,7 @@ os.makedirs(FFDIR, exist_ok=True)
 
 
 def compute_fail_freq_for_test_classes():
-    project_stages = pd.read_csv(const.OMIN_FILE)
+    project_stages = pd.read_csv(const.DATASET_FILE)
     project_stages = project_stages[["project", "stage_id"]].drop_duplicates().values.tolist()
     freq = {}
     for project, stage in project_stages:
@@ -47,7 +47,7 @@ def compute_fail_freq_for_test_classes():
 
 
 def get_no_fail_test_classes():
-    project_stages = pd.read_csv(const.OMIN_FILE)
+    project_stages = pd.read_csv(const.DATASET_FILE)
     project_stages = project_stages[["project", "stage_id"]].drop_duplicates().values.tolist()
     freq = {}
     for project, stage in project_stages:
@@ -188,7 +188,7 @@ def process_jira_flaky_tests():
 
 
 def get_common_failed_tests():
-    omin = pd.read_csv(const.OMIN_FILE)
+    omin = pd.read_csv(const.DATASET_FILE)
     omin = omin.sort_values(["project", "build_timestamp"], ascending=True)
     omin = omin[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
     ret = {}
@@ -297,7 +297,7 @@ def extract_dataset_with_filterlabel():
         2. not in intersection of failed test set across stage
         3. frequently failed test
     """
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[["project", "pr_name", "build_id", "build_timestamp"]].drop_duplicates().values.tolist()
     df = [(idx, proj, pr, build, ts) for idx, (proj, pr, build, ts) in enumerate(df)]
     pool = mp.Pool(mp.cpu_count())
@@ -336,7 +336,7 @@ def update_first_history(project, stage, df, fail_hist, trans_hist):
 
 
 def amend_first_failure_filter():
-    omin = pd.read_csv(const.OMIN_FILE)
+    omin = pd.read_csv(const.DATASET_FILE)
     # sort tests from oldest to latest
     omin = omin.sort_values(["project", "build_timestamp"], ascending=True)
     omin = omin[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
@@ -366,7 +366,7 @@ def get_num_fail_or_trans(tests, filters):
 
 def calculate_dataset_variant_stats():
     """compute stats (#failed tests) per (stage, build) under different filtering conditions"""
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     # print(df.columns)
     jira_for_fail = "jira_for_fail"
     stageunique_for_fail = "stageunique_for_fail"
@@ -409,13 +409,13 @@ def calculate_dataset_variant_stats():
             df.loc[idx, new_col_name] = get_num_fail_or_trans(trans, combo)
         if idx % 1000 == 0:
             print(idx, project, pr_name, build_id, stage_id)
-    df.to_csv(const.OMIN_FILTER_FILE, index=False)
+    df.to_csv(const.DATASET_FILTER_FILE, index=False)
 
 
 
 def extract_filtered_tests_for_builds():
     """get the to be filtered tests in each filter for each build"""
-    omin = pd.read_csv(const.OMIN_FILE)
+    omin = pd.read_csv(const.DATASET_FILE)
     omin = omin[["project", "pr_name", "build_id", "stage_id"]].values.tolist()
     filters = [eval_const.FILTER_JIRA, eval_const.FILTER_STAGEUNIQUE, 
                eval_const.FILTER_FREQFAIL, eval_const.FILTER_FIRST]

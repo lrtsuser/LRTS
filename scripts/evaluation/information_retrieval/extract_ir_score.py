@@ -161,7 +161,7 @@ def process_raw_ir_data_per_build(project, index, pr_name, build_id, overwrite=T
 
 def process_raw_ir_data(project):
     # only do IR on builds with failed tests
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     df = df[["pr_name", "build_id"]].drop_duplicates().values.tolist()
 
@@ -173,7 +173,7 @@ def process_raw_ir_data(project):
 def get_ir_score(project):
     os.makedirs(os.path.join(eval_const.feadir, project), exist_ok=True)
     
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     # different stages of the same build is based on the same change
     # get all tests' score relative to the change from all stages

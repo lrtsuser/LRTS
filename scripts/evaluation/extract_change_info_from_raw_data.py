@@ -55,7 +55,7 @@ def extract_change_info_per_build(project, pr_name, build_id, base, head):
 
 
 def extract_change_info(project):
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     # all stages of the same build is on top of the same change, no need to distinguish stages here
     df = df[["pr_name", "build_id", "trunk_sha", "build_head_sha"]].drop_duplicates().values.tolist()
@@ -96,7 +96,7 @@ def extract_change_stats_per_build(project, pr_name, build_id, base, head):
 
 def extract_change_stats(project):
     """get #changed files, #lines added, and #lines deleted per change/build"""
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     # all stages of the same build is on top of the same change, no need to distinguish stages here
     df = df[["pr_name", "build_id", "trunk_sha", "build_head_sha"]].drop_duplicates().values.tolist()

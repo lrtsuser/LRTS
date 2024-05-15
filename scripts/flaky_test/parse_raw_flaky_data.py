@@ -34,7 +34,7 @@ def extract_test_from_summary(summary):
 
 
 def get_earliest_build_timestamp(project):
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     ts = df["build_timestamp"].min()
     print("earliest build: ", datetime.fromtimestamp(ts), ts)

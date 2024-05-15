@@ -84,7 +84,7 @@ def build_test_file_hist_occurance_matrix(project):
     """
     os.makedirs(os.path.join(eval_const.feadir, project), exist_ok=True)
 
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     stages = list(set(df["stage_id"].values.tolist()))
 

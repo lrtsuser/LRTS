@@ -121,7 +121,7 @@ def extract_change_based_features(project, overwrite=True, reuse_existing_data=T
     print("processing", project)
     os.makedirs(os.path.join(eval_const.feadir, project), exist_ok=True)
 
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
 
     # sort the build from oldest to latest

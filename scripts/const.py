@@ -126,11 +126,11 @@ PATCH_DIR = "patch"
 DIFF_DIR = "diff"
 
 # omin_init contains build stats, and trunk pr head sha, enough to collect test results
-OMIN_INIT_FILE = os.path.join(metadir, "omin_init.csv")
+DATASET_INIT_FILE = os.path.join(metadir, "dataset_init.csv")
 # compared with omin_init, this contains accurate test result metadata per build
-OMIN_FILE = os.path.join(metadir, "omin.csv")
+DATASET_FILE = os.path.join(metadir, "dataset.csv")
 # compared with omin, this contains filter test metadata per build
-OMIN_FILTER_FILE = os.path.join(metadir, "omin_filter.csv")
+DATASET_FILTER_FILE = os.path.join(metadir, "dataset_filter.csv")
 
 
 # test case status

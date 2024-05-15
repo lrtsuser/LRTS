@@ -245,7 +245,7 @@ def extract_ir_body(project):
     os.makedirs(os.path.join(ir_const.irdata_dir, project), exist_ok=True)
     
     # only do IR on builds with failed tests
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     df = df[df["project"] == project]
     df = df[["pr_name", "pr_base_branch", "build_id", "trunk_sha", "build_head_sha"]].drop_duplicates().values.tolist()
     print("PROCESSING #builds", len(df))
