@@ -34,7 +34,7 @@ def process_test_result(project, pr_name, build_id):
     return rows
 
 
-def get_omin_file():
+def get_omni_file():
     df = pd.read_csv(os.path.join(const.metadir, const.DATASET_INIT_FILE))
     df = df[df["has_trunk_head_diff_data"] == True]
     df = df[df["build_timestamp"].notnull()]
@@ -63,4 +63,4 @@ def get_omin_file():
     df.to_csv(os.path.join(const.DATASET_FILE), index=False)
 
 if __name__ == "__main__":
-    get_omin_file()
+    get_omni_file()

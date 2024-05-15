@@ -125,11 +125,11 @@ PATCH_DIR = "patch"
 # store the trunk...diff data
 DIFF_DIR = "diff"
 
-# omin_init contains build stats, and trunk pr head sha, enough to collect test results
+# dataset_init contains build stats, and trunk pr head sha, enough to collect test results
 DATASET_INIT_FILE = os.path.join(metadir, "dataset_init.csv")
-# compared with omin_init, this contains accurate test result metadata per build
+# compared with dataset_init, this contains accurate test result metadata per build
 DATASET_FILE = os.path.join(metadir, "dataset.csv")
-# compared with omin, this contains filter test metadata per build
+# compared with dataset, this contains filter test metadata per build
 DATASET_FILTER_FILE = os.path.join(metadir, "dataset_filter.csv")
 
 

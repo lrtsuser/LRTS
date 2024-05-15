@@ -188,11 +188,11 @@ def process_jira_flaky_tests():
 
 
 def get_common_failed_tests():
-    omin = pd.read_csv(const.DATASET_FILE)
-    omin = omin.sort_values(["project", "build_timestamp"], ascending=True)
-    omin = omin[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
+    omni = pd.read_csv(const.DATASET_FILE)
+    omni = omni.sort_values(["project", "build_timestamp"], ascending=True)
+    omni = omni[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
     ret = {}
-    for idx, (project, pr_name, build_id) in enumerate(omin):
+    for idx, (project, pr_name, build_id) in enumerate(omni):
         failed_tests = []
         stage_files = glob.glob(os.path.join(
             eval_const.trdir, project, f"{pr_name}_build{build_id}/stage*/{eval_const.TEST_CLASS_CSV}"))
@@ -202,7 +202,7 @@ def get_common_failed_tests():
             failed_tests.append(set(stage_fails))
         # union = set().union(*failed_tests)
         intersection = list(set.intersection(*failed_tests))
-        prev = ",, ".join([str(x) for x in omin[idx-1]]) if (idx >= 1 and omin[idx-1][0] == project) else None
+        prev = ",, ".join([str(x) for x in omni[idx-1]]) if (idx >= 1 and omni[idx-1][0] == project) else None
         ret[",, ".join([project, pr_name, str(build_id)])] = {
             "intersection": intersection, 
             "prev": prev}
@@ -336,13 +336,13 @@ def update_first_history(project, stage, df, fail_hist, trans_hist):
 
 
 def amend_first_failure_filter():
-    omin = pd.read_csv(const.DATASET_FILE)
+    omni = pd.read_csv(const.DATASET_FILE)
     # sort tests from oldest to latest
-    omin = omin.sort_values(["project", "build_timestamp"], ascending=True)
-    omin = omin[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
+    omni = omni.sort_values(["project", "build_timestamp"], ascending=True)
+    omni = omni[["project", "pr_name", "build_id"]].drop_duplicates().values.tolist()
     fail_hist, trans_hist = {}, {}
 
-    for index, (project, pr_name, build_id) in enumerate(omin):
+    for index, (project, pr_name, build_id) in enumerate(omni):
         stage_files = glob.glob(os.path.join(
             eval_const.trdir, project, f"{pr_name}_build{build_id}", "stage_*", eval_const.TEST_CLASS_FL_CSV))
         for stage_file in stage_files:
@@ -415,11 +415,11 @@ def calculate_dataset_variant_stats():
 
 def extract_filtered_tests_for_builds():
     """get the to be filtered tests in each filter for each build"""
-    omin = pd.read_csv(const.DATASET_FILE)
-    omin = omin[["project", "pr_name", "build_id", "stage_id"]].values.tolist()
+    omni = pd.read_csv(const.DATASET_FILE)
+    omni = omni[["project", "pr_name", "build_id", "stage_id"]].values.tolist()
     filters = [eval_const.FILTER_JIRA, eval_const.FILTER_STAGEUNIQUE, 
                eval_const.FILTER_FREQFAIL, eval_const.FILTER_FIRST]
-    for idx, (project, pr_name, build_id, stage_id) in enumerate(omin):
+    for idx, (project, pr_name, build_id, stage_id) in enumerate(omni):
         if idx % 1000 == 0:
             print(project, pr_name, build_id, stage_id)
         input_dir = os.path.join(eval_const.trdir, project, 

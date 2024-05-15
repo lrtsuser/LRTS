@@ -16,7 +16,7 @@ def check_has_trunk_head_diff_data(project, pr_name, build_id, base, head):
     return False
 
 
-def get_init_omin_file_per_project(project):
+def get_init_omni_file_per_project(project):
     bstats = pd.read_csv(os.path.join(const.metadir, project, const.BUILDSTATS_FILE))
     # pr_name,pr_base_branch,build_id,build_timestamp,trunk_sha_timestamp_sec,build_head_sha,trunk_sha,trunk_sha_source
     shamap = pd.read_csv(os.path.join(const.metadir, project, const.TRUNK_PRHEAD_MAP_FILE))
@@ -45,7 +45,7 @@ def get_init_omin_file_per_project(project):
     return df
 
 
-def get_init_omin_file():
+def get_init_omni_file():
     """
     merge buildstats.csv with trunk_prhead_map.csv
     does a build has:
@@ -53,10 +53,10 @@ def get_init_omin_file():
         - a commit json on the prhead sha
         - a commit json between the trunk and prhead sha
     """
-    dfs = [get_init_omin_file_per_project(x) for x in const.PROJECTS]
+    dfs = [get_init_omni_file_per_project(x) for x in const.PROJECTS]
     df = pd.concat(dfs, axis=0)
     df.to_csv(const.DATASET_INIT_FILE, index=False)
 
 
 if __name__ == "__main__":
-    get_init_omin_file()
+    get_init_omni_file()

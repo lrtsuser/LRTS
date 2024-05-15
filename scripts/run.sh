@@ -24,6 +24,6 @@ python3 -u get_sha_data.py
 
 
 # extract test results
-python3 -u build_init_omin.py
+python3 -u build_init_dataset.py
 python3 -u extract_test_result.py
 
