@@ -175,39 +175,6 @@ class FaultDetectionMetric:
         worst_case_cost = self.num_bugs * sum(self.ts_duration)
         return sum(TF_costs) / worst_case_cost
 
-# ------------ NRPA ------------
-
-def RPA(R):
-    k = len(R)
-    s1 = np.cumsum(np.array(R)).sum()
-    s2 = (k * k) * (k + 1) / 2
-    return s1 / s2
-
-
-def NRPA(tests, num_fail_tests):
-    if num_fail_tests <= 0:
-        return np.nan
-    
-    num_tests = len(tests)
-    # compute true ranking
-    true_R = list(reversed([i + 1 for i in range(len(tests))]))
-    # compute predicted ranking
-    predicted_R = []
-    seen_fails, seen_passes = 0, 0
-    for t in tests:
-        # the true rank of a pass test is after all failed tests
-        if t.outcome == eval_const.PASS:
-            ri = num_tests - num_fail_tests - seen_passes
-            seen_passes += 1
-            predicted_R.append(ri)
-        elif t.outcome == eval_const.FAIL:
-            ri = num_tests - seen_fails
-            seen_fails += 1
-            predicted_R.append(ri)
-        else:
-            exit("ERROR WHILE COMPUTING NRPA")
-    return RPA(predicted_R) / RPA(true_R)
-
 
 def realistic_metric(tests_for_fail):
     # time to first fail
@@ -274,9 +241,6 @@ def compute_metrics(tests, filtered_failed_tests=set(), filtered_trans_tests=set
                 num_pass_to_fail=num_pass_to_fail, num_fail_to_pass=num_fail_to_pass)
             values[f"APTD_{bug_mapping}_{fix_mapping}"] = trans_metric.APTD()
             values[f"APTDc_{bug_mapping}_{fix_mapping}"] = trans_metric.APTDc()
-
-    # compute NRPA
-    values["NRPA"] = NRPA(tests_for_fail, num_fail_tests)
 
     ttff, ttaf, ntff, ntaf, totaltime, totaltest = realistic_metric(tests_for_fail)
     values["TTFF"] = ttff

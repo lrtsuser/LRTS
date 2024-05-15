@@ -342,7 +342,6 @@ class TestPrioritization:
         fpath = os.path.join(
             "reinforcement_learning/rl_data", self.project, f"{self.pr_name}_build{self.build_id}",
             f"stage_{self.stage_id}", f"{self.tcp.lower()}_{seed}.json.gz")
-        # /Users/samcheng/Desktop/bigRT/evaluation/reinforcement_learning/rl_data/activemq/PR-126_build1/stage_single/rl_mlpclassifier_failcount_0.json.gz
         with gzip.open(fpath, "rt") as f:
             rl_scores = json.load(f)
             tests = copy.deepcopy(self.tests)

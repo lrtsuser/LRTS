@@ -118,7 +118,6 @@ def extract_change_stats_runner():
 
 
 if __name__ == "__main__":
-    # for project in const.PROJECTS:
-    #     extract_change_info(project)
-    extract_change_stats_runner()
+    for project in const.PROJECTS:
+        extract_change_info(project)
     pass

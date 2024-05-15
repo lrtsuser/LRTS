@@ -28,15 +28,6 @@ for project in const.PROJECTS:
     os.makedirs(os.path.join(eval_const.mldir, project), exist_ok=True)
 
 
-# def get_build_at_split(df, split):
-#     # fdf = df[df["failcount"] > 0].copy()
-#     row = df.iloc[int(len(df) * split)]
-#     pr_name = row["pr_name"]
-#     build_id = row["build_id"]
-#     index = df.index[(df["pr_name"] == pr_name) & (df["build_id"] == build_id)].tolist()
-#     return index[0]
-
-
 def display_split_statistics(project, training_set, testing_set):
     num_train_fail = len(training_set[training_set["num_fail_class"] > 0])
     num_test_fail = len(testing_set[testing_set["num_fail_class"] > 0])
@@ -157,7 +148,6 @@ def train_ml_model(project, scale=True):
     print("loading data for", project)
     data = pd.read_csv(os.path.join(eval_const.mldir, project, eval_const.ML_TRAINING_DATA))
     Y = data["outcome"]
-    # X = data.drop(columns=["pr_name", "build_id", "stage_id", "testclass", "outcome"])
     X = data.drop(columns=["outcome"])
 
     # for each feature set
@@ -245,15 +235,15 @@ def predict_prob(project):
 
 
 if __name__ == "__main__":
-    # # split the builds into training and testing
-    # get_train_test_split()
-    # # get ml features per build, aggregrate over builds to get dataset
-    # for project in const.PROJECTS:
-    #     get_ml_dataset(project)
-    #     get_ml_training_dataset(project)
-    # # train models of 10 seeds times 5 feature sets per project on the training split
-    # for project in const.PROJECTS:
-    #     train_ml_model(project)
+    # split the builds into training and testing
+    get_train_test_split()
+    # get ml features per build, aggregrate over builds to get dataset
+    for project in const.PROJECTS:
+        get_ml_dataset(project)
+        get_ml_training_dataset(project)
+    # train models of 10 seeds times 5 feature sets per project on the training split
+    for project in const.PROJECTS:
+        train_ml_model(project)
     # predict probs with all trained models on the testing split
     for project in const.PROJECTS:
         predict_prob(project)

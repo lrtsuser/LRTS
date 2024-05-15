@@ -4,8 +4,6 @@ import sys
 import json
 import multiprocessing as mp
 from nltk.metrics.distance import edit_distance
-# from nltk.tokenize import RegexpTokenizer
-import itertools
 import re
 
 script_dir = os.path.dirname(__file__)
@@ -18,7 +16,6 @@ import const
 import eval_const
 import eval_utils
 
-# tk = RegexpTokenizer(r'[A-Za-z]+')
 
 
 def tokenize(s):

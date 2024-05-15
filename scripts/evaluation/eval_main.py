@@ -34,7 +34,7 @@ def construct_testrun_objects(project, pr_name, build_id, stage_id):
 
 
 def eval_tcp_on_build(project, tcp, pr_name, build_id, stage_id, index,
-                      filters, save_ordered_tests=True, use_ordered_tests=False):
+                      filters, save_ordered_tests=True, use_ordered_tests=True):
     """
     evaluate a tcp on a test run, return seed -> metric value 
     {
@@ -47,7 +47,6 @@ def eval_tcp_on_build(project, tcp, pr_name, build_id, stage_id, index,
     if use_ordered_tests:
         filtered_fails, filtered_trans = eval_utils.load_filter_tests(
             project, pr_name, build_id, stage_id, filters)
-        # print(project, pr_name, build_id, stage_id, filtered_fails, filtered_trans)
         for seed in range(NSEEDS):
             ordered_tests = eval_utils.load_ordered_tests(
                 project, pr_name, build_id, stage_id, tcp, seed)
@@ -168,9 +167,6 @@ def eval_tcp_on_project(project, tcp, filters):
 
 
 def eval():
-    # stop hybrid after: hcbt_IR_0Context, james
-    # last_proj_idx = const.PROJECTS.index(const.KAFKA)
-    # last_tcp_idx = eval_const.EVAL_TCPS.index("cbt_IR_WholeFile_tfidf")
     for filters in eval_const.FILTER_COMBOS:
         for i, project in enumerate(const.PROJECTS):
             # create folder to store results
@@ -179,11 +175,6 @@ def eval():
 
             # evaluate tcp
             for j, tcp in enumerate(eval_const.EVAL_TCPS):
-                # if i < last_proj_idx:
-                #     continue
-                # if i == last_proj_idx and j < last_tcp_idx:
-                #     continue
-                # print(project, tcp)
                 eval_tcp_on_project(project, tcp, filters)
 
 if __name__ == "__main__":

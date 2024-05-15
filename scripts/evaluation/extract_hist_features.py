@@ -15,22 +15,6 @@ sys.path.append(local_dir)
 import const
 import eval_const
 
-"""
-for test t in Build suite_N, extract its data from previous build suite_1 to suite_N-1
-
-from https://dl.acm.org/doi/10.1145/3460319.3464834, get
-- F1.1 failure count, total number of times t failed
-- F1.2 last failure, amount of CI runs since last failure
-- F1.4 last transition, amount of CI runs since last transition
-- F1.5 average test execution time across previous builds
-
-- F2.1 Maximum (test, file)-failure frequency, Given a test t in Suite_N, 
-    for each file in the combined changeset, 
-    we first obtain the total (t, file)-failure frequency from {suite_1 ... suite_N-1}. 
-    Then, we determine the maximum across all files, 
-    as the combined changeset is as risky for t as its riskiest file.
-"""
-
 
 def update_history(d, new_average_duration, duration, outcome):
     if outcome == eval_const.FAIL:

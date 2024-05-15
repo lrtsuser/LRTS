@@ -1,6 +1,8 @@
 # Artifact
 
 
+Each sub-directory has a README that provides more information.
+
 ### Collecting more builds for existing projects
 
 Scripts at this directory level are used for collecting pull-request build data (test report, code change, build metadata, build log) from Jenkins CI and Github for the listed project (See `const.py` for the project list, and see `run.sh` for more description). 

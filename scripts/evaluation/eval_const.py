@@ -160,15 +160,12 @@ BASIC_TCPS = [
 
 # More advance RTP
 EVAL_TCPS = BASIC_TCPS.copy() + RL_TCPS.copy()
-# # EVAL_TCPS = []
-# # run time-break tie RTP
-# EVAL_TCPS += ["cbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, QTF_TCP] + RL_TCPS]
+# EVAL_TCPS = []
+# run time-break tie RTP
+EVAL_TCPS += ["cbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, QTF_TCP] + RL_TCPS]
 
-# # # run failure count-break tie RTP
-# # EVAL_TCPS += ["hbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, FC_TCP] + RL_TCPS]
-
-# # run failure count / time-break tie RTP
-# EVAL_TCPS += ["hcbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, FC_TCP, QTF_TCP] + RL_TCPS]
+# run failure count / time-break tie RTP
+EVAL_TCPS += ["hcbt_" + x for x in BASIC_TCPS if x not in [RANDOM_TCP, FC_TCP, QTF_TCP] + RL_TCPS]
 
 
 METRIC_NAMES = [
@@ -185,15 +182,9 @@ METRIC_NAMES = [
     "APTDc_sameBug_uniqueFix",
     "APTDc_uniqueBug_sameFix",
     "APTDc_uniqueBug_uniqueFix",
-    "NRPA",
+    # "NRPA",
     # "TTFF", "TTAF", "NTFF", "NTAF", "TotalTime", "TotalTest"
 ]
-
-
-# # TODO: run historical based RTP with window
-# EVAL_TCPS = []
-# for window in WINDOW_SIZES:
-#     EVAL_TCPS += [f"limhist{window}_" + x for x in [QTF_AVG_TCP, LTF_AVG_TCP, LF_TCP, FC_TCP, LT_TCP, TC_TCP]]
 
 
 ML_FEATURE_SETS = {
@@ -221,8 +212,6 @@ FILTER_STAGEUNIQUE = "stageunique"
 FILTER_FREQFAIL = "freqfail"
 FILTER_COMBOS = [
     [FILTER_JIRA, FILTER_STAGEUNIQUE, FILTER_FREQFAIL],
-    # [FILTER_JIRA, FILTER_FREQFAIL],
-    # [FILTER_FIRST, FILTER_JIRA],
     [FILTER_FIRST, FILTER_JIRA, FILTER_STAGEUNIQUE],
     [],
 ]
