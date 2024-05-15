@@ -235,15 +235,15 @@ def predict_prob(project):
 
 
 if __name__ == "__main__":
-    # split the builds into training and testing
-    get_train_test_split()
+    # # split the builds into training and testing
+    # get_train_test_split()
     # get ml features per build, aggregrate over builds to get dataset
-    for project in const.PROJECTS:
-        get_ml_dataset(project)
-        get_ml_training_dataset(project)
-    # train models of 10 seeds times 5 feature sets per project on the training split
-    for project in const.PROJECTS:
-        train_ml_model(project)
+    # for project in const.PROJECTS:
+    #     get_ml_dataset(project)
+    #     get_ml_training_dataset(project)
+    # # train models of 10 seeds times 5 feature sets per project on the training split
+    # for project in const.PROJECTS:
+    #     train_ml_model(project)
     # predict probs with all trained models on the testing split
     for project in const.PROJECTS:
         predict_prob(project)
