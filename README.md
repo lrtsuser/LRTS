@@ -21,6 +21,6 @@ Go to [this link](https://drive.google.com/file/d/1sx763uvJflRZn_n3xhDRrB-E7FodR
 
 ## Scripts
 
-`scripts` folder contains our code for continuing download more test-suite runs from the curated project. 
+`scripts` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts.
 
 **We are preparing and releasing our technique implement and experiment analysis code.**
