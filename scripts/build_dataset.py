@@ -13,9 +13,8 @@ def stage_statistics(class_df):
     # test class level pass and fail
     num_pass_class = len(class_df[class_df["outcome"] == eval_const.PASS].index)
     num_fail_class = len(class_df[class_df["outcome"] == eval_const.FAIL].index)
-    num_trans_class = (class_df["outcome"] - class_df["last_outcome"]).abs().sum()
 
-    return [stage_duration, num_pass_class, num_fail_class, num_trans_class]
+    return [stage_duration, num_pass_class, num_fail_class]
 
 
 def process_test_result(project, pr_name, build_id):
@@ -45,14 +44,14 @@ def get_omni_file():
     ret = [l for ls in ret for l in ls]
     ret = pd.DataFrame(ret, columns=[
         "project", "pr_name", "build_id", "stage_id",
-        "stage_duration", "num_pass_class", "num_fail_class", "num_trans_class",
+        "test_suite_duration_s", "num_pass_class", "num_fail_class",
     ])
     df = pd.merge(df, ret, "left", on=["project", "pr_name", "build_id"])
     
     # remove useless cols, now all builds in this csv have diff data
     df = df.drop(
         labels=[
-            "trunk_sha_timestamp_sec", "has_trunk_head_diff_data"
+            "trunk_sha_timestamp_sec", "has_trunk_head_diff_data",
             # info from raw test report
             "ts_duration", "passcount", "failcount", "skipcount",
             ],

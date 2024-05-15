@@ -449,7 +449,7 @@ if __name__ == "__main__":
     extract_dataset_with_filterlabel()
     amend_first_failure_filter()
     calculate_dataset_variant_stats()
-    extract_filtered_tests_for_builds()
+    # extract_filtered_tests_for_builds()
     # get_no_fail_test_classes()
     # get_test_classes_exec_count()
     # get_test_classes_fail_count()

@@ -36,14 +36,6 @@ def display_split_statistics(project, training_set, testing_set):
     "#Testing Fail", num_test_fail, 
     # "%FAIL IN TRAINING / ALL", round(100 * (num_train_fail / (num_test_fail + num_train_fail)), 2)
     )
-    # num_train_trans = len(training_set[training_set["num_trans_class"] > 0])
-    # num_test_trans = len(testing_set[testing_set["num_trans_class"] > 0])
-    # print(project, 
-    # "#Training Trans", num_train_trans, 
-    # "#Testing Trans", num_test_trans, 
-    # # "%TRANS IN TRAINING / ALL", round(100 * (num_train_trans / (num_test_trans + num_train_trans)), 2)
-    # )
-
 
 def get_train_test_split(split=0.75):
     # split is relative all builds

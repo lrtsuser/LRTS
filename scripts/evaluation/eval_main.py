@@ -82,10 +82,6 @@ def eval_tcp_on_build(project, tcp, pr_name, build_id, stage_id, index,
     return results, pr_name, build_id, stage_id
 
 
-# def filter_builds(df):
-#     df = df[(df["num_fail_class"] > 0) | (df["num_trans_class"] > 0)]
-#     return df
-
 
 def filter_builds(df, filters):
     fail_filter_ret = df["num_fail_class"] > 0
