@@ -25,15 +25,15 @@ LOG4J = "log4j"
 
 PROJECTS = [
     ACTIVEMQ,
-    # HADOOP,
-    # HBASE,
-    # HIVE,
-    # JACK,
-    # JAMES,
-    # KAFKA,
-    # KARAF,
-    # LOG4J,
-    # TVM,
+    HADOOP,
+    HBASE,
+    HIVE,
+    JACK,
+    JAMES,
+    KAFKA,
+    KARAF,
+    LOG4J,
+    TVM,
 ]
 
 PROJECT_PRETTY = {
@@ -129,6 +129,7 @@ DIFF_DIR = "diff"
 DATASET_INIT_FILE = os.path.join(metadir, "dataset_init.csv")
 # compared with dataset_init, this contains accurate test result metadata per build
 DATASET_FILE = os.path.join(metadir, "dataset.csv")
+OMIN_FILE = os.path.join(metadir, "omin.csv")
 # compared with dataset, this contains filter test metadata per build
 DATASET_FILTER_FILE = os.path.join(metadir, "dataset_filter.csv")
 
