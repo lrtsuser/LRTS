@@ -22,10 +22,10 @@ After running `./run.sh`, we can run `python3 build_omin.py` to create a metadat
 
 ### Running evaluation experiments in the processed dataset
 
-`./evaluation` provides scripts to run evaluation experiments. To run experiments in the processed LRTS dataset, decompressed the downloaded dataset, move the `processed_test_result/` ans `shadata` to this folder; move the `dataset.csv` to `../metadata`. 
+`evaluation/` provides scripts to run evaluation experiments. To run experiments in the processed LRTS dataset, decompressed the downloaded dataset, move the `processed_test_result/` ans `shadata/` to this folder; move the `dataset.csv` to `../metadata`. 
 
 Run `extract_filtered_test_result.py` to create create processed test results where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled. 
 
 ### Producing plots and figures in the evaluation section
 
-``
+`./analysis_paper` provides scripts to produce figure and tables in our evaluation.
