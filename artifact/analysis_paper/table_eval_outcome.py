@@ -46,12 +46,6 @@ def get_median(tcps, df):
     return data
 
 
-def get_num_best_projects(tcps, df):
-    # per tcp, see how many projects have the best mean metric value across all tcps
-    # TODO: we only have 10 projects, not very useful
-    pass
-
-
 def get_tukey_test_group(tcps, df):
     data = [(t, df[df["tcp"] == t]["metric"].values.tolist()) for t in tcps]
     with open("tukey.csv", "w") as f:
@@ -67,26 +61,6 @@ def get_tukey_test_group(tcps, df):
     os.system("rm tukey.csv")
     os.system("rm tukey_group.csv")
     return groups
-
-
-def assign_group_letters(tcps, groups):
-    # assume tcps has been sorted left to right from highest to lowest metric value
-
-    # for each group, get the best value
-    for i, group in enumerate(groups):
-        values = [tcps.index(t) for t in group]
-        groups[i] = (min(values), group)
-    
-    # sort by values, best group first
-    groups.sort(key=lambda x: x[0], reverse=False)
-    # print("sorted", groups)
-
-    # assign group letter
-    letters = {}
-    for i, group in enumerate(groups):
-        for tcp in group[1]:
-            letters[tcp] = chr(ord('A') + i)
-    return letters
 
 
 def evaluation_table(filters):
@@ -111,10 +85,7 @@ def evaluation_table(filters):
         df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
         means = get_mean(tcps, df)
         letters = get_tukey_test_group(tcps, df)
-        # letters = assign_group_letters(tcps, groups)
-        
-        # df = collect_data_by_median(tcps, filters)
-        # df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
+
         medians = get_median(tcps, df)
         if group_name == "ALL":
             tcps = sorted(tcps, key=lambda x: sorted_tcps.index(x), reverse=False)
@@ -273,6 +244,7 @@ def get_tcp_performance_on_dataset(filters):
             table.append(row)
     return table, within_category_group
 
+
 def highlight_top_k(orders, k=5):
     ranked = sorted(orders, key=lambda x: x[1], reverse=True)
     for i in range(k):
@@ -281,6 +253,7 @@ def highlight_top_k(orders, k=5):
             if orders[i][0] == top_i_tcp:
                 orders[i] = [orders[i][0], f"\\textbf{{{orders[i][1]}}}", orders[i][2], f"\\textbf{{{orders[i][-1]}}}"]
     pass
+
 
 def tab_comparsion_over_datasets():
     print("\nExperiment Result Table Across Dataset Versions")
@@ -308,6 +281,7 @@ def tab_comparsion_over_datasets():
 
 
 def tab_dataset_performance_with_hybrid_improvement(filters):
+    print("\nExperiment Result Table Between Basic and Hybrid TCP Techniques on ", marco.DATASET_MARCO['_'.join(filters)])
     basic_table, within_category_group = get_tcp_performance_on_dataset(filters)
     basic_table_dict = {row[0]: [row[1], row[-1]] for row in basic_table}
     hybrid_table = hybrid_evaluation_table_per_group(filters)
@@ -320,7 +294,6 @@ def tab_dataset_performance_with_hybrid_improvement(filters):
                marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Improvement']
     header += [marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
                marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Improvement']
-    print("\nExperiment Result Table Between Basic and Hybrid TCP Techniques on ", marco.DATASET_MARCO['_'.join(filters)])
     print(",".join(header))
     for row in basic_table:
         tcp = row[0]
@@ -333,6 +306,6 @@ if __name__ == "__main__":
     # evaluation_table(marco.FILTER_COMBOS[0])
     # evaluation_table_for_IR(marco.FILTER_COMBOS[0])
     # hybrid_evaluation_table_per_group(marco.FILTER_COMBOS[0])
-    # tab_comparsion_over_datasets()
+    tab_comparsion_over_datasets()
     tab_dataset_performance_with_hybrid_improvement(marco.FILTER_COMBOS[0])
     pass
