@@ -173,6 +173,12 @@ FILTER_STAGEUNIQUE = "stageunique"
 FILTER_FREQFAIL = "freqfail"
 FILTER_COMBOS = [
     [FILTER_JIRA, FILTER_STAGEUNIQUE, FILTER_FREQFAIL],
-    [FILTER_FIRST, FILTER_JIRA, FILTER_STAGEUNIQUE],
     [],
+    [FILTER_FIRST, FILTER_JIRA, FILTER_STAGEUNIQUE],
 ]
+
+DATASET_MARCO = {
+    "jira_stageunique_freqfail": "LRTS-DeConf",
+    "first_jira_stageunique": "LRTS-FirstFail",
+    "": "LRTS-All",
+}

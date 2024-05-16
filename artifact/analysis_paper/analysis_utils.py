@@ -30,10 +30,11 @@ def get_dataset(filters):
         
 
 def get_title(filters):
-    if len(filters) == 0:
-        return "eval-no_filter"
-    else:
-        return f"eval-{'_'.join(filters)}" 
+    return "eval-" + marco.DATASET_MARCO["_".join(filters)]
+    # if len(filters) == 0:
+    #     return "eval-no_filter"
+    # else:
+    #     return f"eval-{'_'.join(filters)}" 
 
 # load stage information
 def load_stages_with_50builds():

@@ -23,4 +23,8 @@ Go to [this link](https://drive.google.com/file/d/1qduPul0zLWpPNYBUV5wUOCktre6TG
 
 `artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts.
 
+#### Requirement
+
+Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`.
+
 **We are preparing and releasing our technique implement and experiment analysis code.**

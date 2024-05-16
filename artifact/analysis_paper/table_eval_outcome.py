@@ -52,17 +52,17 @@ def get_num_best_projects(tcps, df):
     pass
 
 
-def get_nemenyi_test_group(tcps, df):
+def get_tukey_test_group(tcps, df):
     data = [(t, df[df["tcp"] == t]["metric"].values.tolist()) for t in tcps]
 
-    # check for normality: most of the data is not normal, pvalue<0.001
-    for t in data:
-        print("Shapiro", t[0], len(t[1]), stats.shapiro(t[1]))
-    print("All Shapiro", stats.shapiro([item for sublist in data for item in sublist[1]]))
+    # # check for normality: most of the data is not normal, pvalue<0.001
+    # for t in data:
+    #     print("Shapiro", t[0], len(t[1]), stats.shapiro(t[1]))
+    # print("All Shapiro", stats.shapiro([item for sublist in data for item in sublist[1]]))
 
 
     # get f-oneway
-    print("F-oneway", stats.f_oneway(*[x[1] for x in data]).pvalue)
+    # print("F-oneway", stats.f_oneway(*[x[1] for x in data]).pvalue)
 
     with open("tukey.csv", "w") as f:
         f.write("tcp,score\n")
@@ -74,6 +74,8 @@ def get_nemenyi_test_group(tcps, df):
     groups = {}
     for idx, row in df.iterrows():
         groups[idx] = row["groups"].upper()
+    os.system("rm tukey.csv")
+    os.system("rm tukey_group.csv")
     return groups
 
 
@@ -166,7 +168,7 @@ def evaluation_table(filters):
         tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
         df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
         means = get_mean(tcps, df)
-        letters = get_nemenyi_test_group(tcps, df)
+        letters = get_tukey_test_group(tcps, df)
         # letters = assign_group_letters(tcps, groups)
         
         # df = collect_data_by_median(tcps, filters)
@@ -262,7 +264,7 @@ def hybrid_evaluation_table_per_group(filters):
 
             means = get_mean(tcps, df)
             medians = get_median(tcps, df)
-            letters = get_nemenyi_test_group(tcps, df)
+            letters = get_tukey_test_group(tcps, df)
             # letters = assign_group_letters(tcps, groups)
 
             table[model] = {"means": means, "medians": medians, "letters": letters}
@@ -303,17 +305,12 @@ def compare_over_dataset_helper(filters):
     table = []
 
     for tcps, group_name in plotting_tcps:
-        print("\n\n", group_name)
         # collect mean
         df = plot_eval_outcome.collect_data(tcps, filters)
         # tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
         df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
         means = get_mean(tcps, df)
-        letters = get_nemenyi_test_group(tcps, df)
-        # letters = assign_group_letters(tcps, groups)
-        
-        # df = collect_data_by_median(tcps, filters)
-        # df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
+        letters = get_tukey_test_group(tcps, df)
         medians = get_median(tcps, df)
 
         for tcp in tcps:
@@ -330,32 +327,35 @@ def highlight_top_k(orders, k=5):
                 orders[i] = [orders[i][0], f"\\textbf{{{orders[i][1]}}}", orders[i][2], f"\\textbf{{{orders[i][-1]}}}"]
     pass
 
-def compare_over_datasets():
+def comparsion_over_datasets():
+    print("\nExperiment Result Table Across Dataset Versions")
     meta = []
     for filters in marco.FILTER_COMBOS:
+        print("computing for dataset version", marco.DATASET_MARCO['_'.join(filters)])
         data = compare_over_dataset_helper(filters)
         meta.append([filters, data])
-    
     # sort all dataset based on the first version
-    # print(meta)
-    # ranking = sorted(meta[0][1], key=lambda x: x[1], reverse=True)
-    # ranking = {tup[0]: idx for idx, tup in enumerate(ranking)}
-    ranking = {tup[0]: idx for idx, tup in enumerate(meta[0][1])}
-    print(ranking)
+    ranking = [tup[0] for tup in meta[0][1]]
+    ranking_idx = {tup[0]: i for i, tup in enumerate(meta[0][1])}
+    table = {tcp: [] for tcp in ranking}
     for filters, orders in meta:
-        # table[1] = [str(x) for x in table[1]]
-        print("\n" + "_".join(filters))
         highlight_top_k(orders)
-        orders = sorted(orders, key=lambda x: ranking[x[0]], reverse=False)
+        orders = sorted(orders, key=lambda x: ranking_idx[x[0]], reverse=False)
         for tcp in orders:
-            print("{},{},{}".format(tcp[0], tcp[1], tcp[-1]))
-
+            table[tcp[0]] += [tcp[1], tcp[-1]]
+    header = ["TCP Techniques"]
+    for filters in marco.FILTER_COMBOS:
+        header.append(marco.DATASET_MARCO["_".join(filters)] + " " + marco.METRIC_NAMES[0])
+        header.append(marco.DATASET_MARCO["_".join(filters)] + " Perf Group")
+    print(",".join(header))
+    for tcp in ranking:
+        print(f"{tcp}," + ",".join([str(x) for x in table[tcp]] + ["-"] * (6 - len(table[tcp]))))
     pass
 
 if __name__ == "__main__":
     # print(marco.FILTER_COMBOS[0])
-    evaluation_table(marco.FILTER_COMBOS[0])
+    # evaluation_table(marco.FILTER_COMBOS[0])
     # evaluation_table_for_IR(marco.FILTER_COMBOS[0])
     # hybrid_evaluation_table_per_group(marco.FILTER_COMBOS[0])
-    # compare_over_datasets()
+    comparsion_over_datasets()
     pass
