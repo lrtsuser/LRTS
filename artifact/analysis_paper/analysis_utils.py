@@ -38,7 +38,7 @@ def get_title(filters):
 # load stage information
 def load_stages_with_50builds():
     ret = {}
-    df = pd.read_csv(const.DATASET_FILE)
+    df = pd.read_csv(const.OMIN_FILE)
     project_stages = df[["project", "stage_id"]].drop_duplicates().values.tolist()
     for project, stage in project_stages:
         num_builds = len(df[(df["project"] == project) & (df["stage_id"] == stage)])
@@ -61,6 +61,12 @@ def read_eval_df(project, tcp, filters):
         f"{project}/{tcp}.csv.zip"))
 
 
+def read_eval_df_rebuttal(project, tcp, filters):
+    return pd.read_csv(os.path.join(
+        eval_const.evaloutcomedir, "rebuttal_d_jira_stageunique_freqfail", 
+        f"{project}/{tcp}.csv.zip"))
+
+
 def get_testing_split(project, df):
     testing_builds = pd.read_csv(os.path.join(
         eval_const.mldir, project, eval_const.ML_TESTING_SET))
@@ -74,7 +80,7 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     """
     input: a csv from eval_outcome for a (project, tcp) tuple
     1. get means across builds per stage
-    2. get mean across stages from step 1. (we dont want one project with many stages to domniate)
+    2. get mean across stages from step 1. (we dont want one project with many stages to dominate)
     return a df of [seed, metric1, metric2, ...]
     """
     # agg_level1 = ["pr_name", "build_id"]
@@ -83,12 +89,12 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     df = read_eval_df(project, tcp, filters)
     df = filter_stages(project, df)
     # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
     # tsr_multifail = tsr_multifail[tsr_multifail["num_fail_class"] >= 11][["project", "pr_name", "build_id", "stage_id"]]
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
 
     # # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
     # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_fail_class"]]
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
     # df = df[(df["num_fail_class"] >= df['num_fail_class'].quantile(0.76)) 
@@ -102,20 +108,20 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     #     & (df["num_changed_line"] <= df['num_changed_line'].quantile(1))]
 
     # FILTERING BASED ON RATIO OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
     # tsr_multifail['fail_ratio'] = tsr_multifail["num_fail_class"] / (tsr_multifail["num_fail_class"] + tsr_multifail["num_pass_class"])
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
     # df = df[(df["fail_ratio"] >= df['fail_ratio'].quantile(.76)) & (df["fail_ratio"] <= df['fail_ratio'].quantile(1))]
 
     # # FILTERING BASED ON TEST SUITE DURATION OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
     # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "stage_duration_by_method_sum"]]
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
     # df = df[(df["stage_duration_by_method_sum"] >= df['stage_duration_by_method_sum'].quantile(0.76)) 
     #     & (df["stage_duration_by_method_sum"] <= df['stage_duration_by_method_sum'].quantile(1))]
 
     # # FILTERING BASED ON TEST SUITE SIZE OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
     # tsr_multifail["num_exec_test"] = tsr_multifail["num_pass_class"] + tsr_multifail["num_fail_class"]
     # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_exec_test"]]
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
@@ -150,4 +156,7 @@ def agg_tcp_wise_data(tcp, filters, data_type="mean"):
     return df
 
 if __name__ == "__main__":
+    # print(STAGES)
+    # agg_project_wise_means("kafka", "QTF")
+    agg_tcp_wise_data("QTF")
     pass
