@@ -311,20 +311,20 @@ def tab_dataset_performance_with_hybrid_improvement(filters):
     basic_table, within_category_group = get_tcp_performance_on_dataset(filters)
     basic_table_dict = {row[0]: [row[1], row[-1]] for row in basic_table}
     hybrid_table = hybrid_evaluation_table_per_group(filters)
-    hybrid_table_dict = {row[0]: [row[1], row[-1]] for row in hybrid_table}
+    hybrid_table_dict = {row[0]: row[2:] for row in hybrid_table}
+    for r in hybrid_table:
+        print(r)
     header = ["TCP Techniques"]
     header += ['Avg ' + marco.METRIC_NAMES[0], "Within Categoruy Perf Group", "Overall Perf Group"]
     header += [marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
                marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Improvement']
     header += [marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
                marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Improvement']
-    print(basic_table_dict)
-    print(hybrid_table_dict)
-    print(within_category_group)
+    print("\nExperiment Result Table Between Basic and Hybrid TCP Techniques on ", marco.DATASET_MARCO['_'.join(filters)])
     print(",".join(header))
     for row in basic_table:
         tcp = row[0]
-        vals = [basic_table_dict[tcp][0]] + [within_category_group[tcp]] + [basic_table_dict[tcp][1]] + hybrid_table_dict.get(tcp, ['-', '-'])
+        vals = [basic_table_dict[tcp][0]] + [within_category_group[tcp]] + [basic_table_dict[tcp][1]] + hybrid_table_dict.get(tcp, ['-'] * 4)
         print(",".join([str(x) for x in [tcp] + vals]))
 
 
