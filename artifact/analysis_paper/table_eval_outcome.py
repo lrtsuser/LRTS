@@ -305,23 +305,28 @@ def tab_controlled_experiment_ir(filters):
         (marco.IR_TCPS, "IR"),
     ]
     sorting_metric = marco.METRIC_NAMES[0]
-    table = []
     for tcps, group_name in plotting_tcps:
-        print("\n\n", group_name)
-        # collect mean
-        df = plot_eval_outcome.collect_data(tcps, filters)
-        tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
-        df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
-        means = get_mean(tcps, df)
-        means = [x for x in means.values()]
-        print(group_name, f", {round(np.array(means).mean(), 3)}, {round(min(means), 3)}-{round(max(means), 3)}")
-    return table
+        print("Computing controlled experiment results for TCP category:", group_name)
+        print("Controlled Variable,<Q1,Q1-Q2,Q2-Q3,>Q3")
+        for control in analysis_utils.IR_CTRLS:
+            row = [control]
+            for quantiles in analysis_utils.IR_CTRL_QUANTILES:
+                # collect mean
+                df = []
+                for tcp in tcps:
+                    df.append(analysis_utils.agg_tcp_wise_data_controlled(
+                        tcp=tcp, filters=filters, data_type="mean", controlled_var=control, quantiles=quantiles))
+                df = pd.concat(df, axis=0)
+                df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
+                means = get_mean(tcps, df)
+                means = [x for x in means.values()]
+                # print(group_name, f", {round(np.array(means).mean(), 3)}, {round(min(means), 3)}-{round(max(means), 3)}")
+                row.append(round(np.array(means).mean(), 3))
+            print(",".join([str(x) for x in row]))
+
 
 if __name__ == "__main__":
-    # print(marco.FILTER_COMBOS[0])
-    # evaluation_table(marco.FILTER_COMBOS[0])
-    # evaluation_table_for_IR(marco.FILTER_COMBOS[0])
-    # hybrid_evaluation_table_per_group(marco.FILTER_COMBOS[0])
     tab_comparsion_over_datasets()
+    tab_controlled_experiment_ir(marco.FILTER_COMBOS[0])
     tab_dataset_performance_with_hybrid_improvement(marco.FILTER_COMBOS[0])
     pass

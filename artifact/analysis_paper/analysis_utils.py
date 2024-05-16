@@ -22,6 +22,13 @@ import evaluation.eval_const as eval_const
 import evaluation.eval_utils as eval_utils
 import marco
 
+IR_CTRL_DURATION = "Duration"
+IR_CTRL_NFAIL = "#Failures"
+IR_CTRL_FAILRATIO = "Fail Ratio"
+IR_CTRL_CHGSIZE = "Change Size"
+IR_CTRLS = [IR_CTRL_DURATION, IR_CTRL_NFAIL, IR_CTRL_FAILRATIO, IR_CTRL_CHGSIZE]
+IR_CTRL_QUANTILES = [[0, 0.25], [0.26, 0.5], [0.51, 0.74], [0.75, 1]]
+
 def get_dataset(filters):
     if len(filters) == 0:
         return "d_nofilter"
@@ -114,57 +121,48 @@ def agg_tcp_wise_data(tcp, filters, data_type="mean"):
     return df
 
 
-def agg_project_wise_data_controlled(project, tcp, filters, data_type="mean"):
+def control_df(df, col, quantiles):
+    df = df[(df[col] >= df[col].quantile(quantiles[0])) 
+        & (df[col] <= df[col].quantile(quantiles[1]))]
+    return df
+
+def agg_project_wise_data_controlled(
+        project, tcp, filters, data_type="mean", controlled_var=None, quantiles=[]):
     agg_level1 = ["seed"]
 
     df = read_eval_df(project, tcp, filters)
     df = filter_stages(project, df)
-    # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    tsr_multifail = pd.read_csv(const.DATASET_FILTER_FILE)
-    tsr_multifail = tsr_multifail[tsr_multifail["num_fail_class"] >= 11][["project", "pr_name", "build_id", "stage_id"]]
-    df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
 
-    # # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
-    # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_fail_class"]]
-    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
-    # df = df[(df["num_fail_class"] >= df['num_fail_class'].quantile(0.76)) 
-    #     & (df["num_fail_class"] <= df['num_fail_class'].quantile(1))]
-    
-    # # FILTERING BASED ON CHANGE SIZE
-    # change_stats = pd.read_csv("/Users/samcheng/Desktop/bigRT/evaluation/change_info/change_stats.csv")
-    # change_stats = change_stats[["project", "pr_name", "build_id", "num_changed_line"]]
-    # df = pd.merge(df, change_stats, how="inner", on=["project", "pr_name", "build_id"])
-    # df = df[(df["num_changed_line"] >= df['num_changed_line'].quantile(0.76)) 
-    #     & (df["num_changed_line"] <= df['num_changed_line'].quantile(1))]
+    # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
+    if controlled_var == IR_CTRL_NFAIL:
+        control = pd.read_csv(const.DATASET_FILTER_FILE)
+        control = control[["project", "pr_name", "build_id", "stage_id", "num_fail_class"]]
+        df = pd.merge(df, control, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
+        df = control_df(df, "num_fail_class", quantiles)
+        
+    # FILTERING BASED ON CHANGE SIZE
+    if controlled_var == IR_CTRL_CHGSIZE:
+        control = pd.read_csv(os.path.join(eval_const.changeinfodir, "change_stats.csv"))
+        control = control[["project", "pr_name", "build_id", "num_changed_line"]]
+        df = pd.merge(df, control, how="inner", on=["project", "pr_name", "build_id"])
+        df = control_df(df, "num_changed_line", quantiles)
 
     # FILTERING BASED ON RATIO OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
-    # tsr_multifail['fail_ratio'] = tsr_multifail["num_fail_class"] / (tsr_multifail["num_fail_class"] + tsr_multifail["num_pass_class"])
-    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
-    # df = df[(df["fail_ratio"] >= df['fail_ratio'].quantile(.76)) & (df["fail_ratio"] <= df['fail_ratio'].quantile(1))]
+    if controlled_var == IR_CTRL_FAILRATIO:
+        control = pd.read_csv(const.DATASET_FILTER_FILE)
+        control['fail_ratio'] = control["num_fail_class"] / (control["num_fail_class"] + control["num_pass_class"])
+        df = pd.merge(df, control, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
+        df = control_df(df, "fail_ratio", quantiles)
 
-    # # FILTERING BASED ON TEST SUITE DURATION OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
-    # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "stage_duration_by_method_sum"]]
-    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
-    # df = df[(df["stage_duration_by_method_sum"] >= df['stage_duration_by_method_sum'].quantile(0.76)) 
-    #     & (df["stage_duration_by_method_sum"] <= df['stage_duration_by_method_sum'].quantile(1))]
-
-    # # FILTERING BASED ON TEST SUITE SIZE OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
-    # tsr_multifail["num_exec_test"] = tsr_multifail["num_pass_class"] + tsr_multifail["num_fail_class"]
-    # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_exec_test"]]
-    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
-    # df = df[(df["num_exec_test"] >= df['num_exec_test'].quantile(0.75)) 
-    #     & (df["num_exec_test"] <= df['num_exec_test'].quantile(1))]
+    # FILTERING BASED ON TEST SUITE DURATION OF A BUILD
+    if controlled_var == IR_CTRL_DURATION:
+        control = pd.read_csv(const.DATASET_FILTER_FILE)
+        control = control[["project", "pr_name", "build_id", "stage_id", "test_suite_duration_s"]]
+        df = pd.merge(df, control, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
+        df = control_df(df, "test_suite_duration_s", quantiles)
 
     if tcp.startswith("RL"):
-        # ML is already testing set
         df = get_testing_split(project, df)
-    # df = get_testing_split(project, df)
-    # print(project, tcp, "#failed builds", 
-    #       len(df.dropna(subset=["APFD_sameBug"])[["pr_name", "build_id", "stage_id"]].drop_duplicates()))
     if data_type == "mean":
         agg = df[agg_level1 + eval_const.METRIC_NAMES].groupby(
             agg_level1).mean().reset_index()
@@ -179,16 +177,15 @@ def agg_project_wise_data_controlled(project, tcp, filters, data_type="mean"):
 
 
 
-def agg_tcp_wise_data_controlled(tcp, filters, data_type="mean"):
+def agg_tcp_wise_data_controlled(
+        tcp, filters, data_type="mean", controlled_var=None, quantiles=[]):
     """get seed-wise data points from all projects for a group of tcps"""
     df = []
     for project in const.PROJECTS:
-        df.append(agg_project_wise_data_controlled(project, tcp, filters, data_type))
+        df.append(agg_project_wise_data_controlled(
+            project, tcp, filters, data_type, controlled_var, quantiles))
     df = pd.concat(df, axis=0)
     return df
 
 if __name__ == "__main__":
-    # print(STAGES)
-    # agg_project_wise_means("kafka", "QTF")
-    agg_tcp_wise_data("QTF")
     pass
