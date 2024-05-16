@@ -354,8 +354,8 @@ def compare_over_datasets():
 
 if __name__ == "__main__":
     # print(marco.FILTER_COMBOS[0])
-    # evaluation_table(marco.FILTER_COMBOS[0])
-    evaluation_table_for_IR(marco.FILTER_COMBOS[0])
+    evaluation_table(marco.FILTER_COMBOS[0])
+    # evaluation_table_for_IR(marco.FILTER_COMBOS[0])
     # hybrid_evaluation_table_per_group(marco.FILTER_COMBOS[0])
     # compare_over_datasets()
     pass

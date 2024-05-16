@@ -58,8 +58,6 @@ BASIC_TCPS = [
     
     QTF_TCP,
     QTF_AVG_TCP,
-    # LTF_TCP,
-    # LTF_AVG_TCP,
 
     LF_TCP,
     FC_TCP,
@@ -67,9 +65,7 @@ BASIC_TCPS = [
     TC_TCP,
 
     TF_FAILFREQ_TCP,
-    # TF_FAILFREQ_REL_TCP,
     TF_TRANSFREQ_TCP,
-    # TF_TRANSFREQ_REL_TCP,
     
     IR_NOCONTEXT_TCP,
     IR_DIFF_TCP,
@@ -135,18 +131,13 @@ MARCOS = {
     # metric
     "APFDc_sameBug": "APFDc-$FFMap_S$",
     "APFDc_uniqueBug": "APFDc-$FFMap_U$",
-    # "APTDc_sameBug_sameFix",
-    # "APTDc_sameBug_uniqueFix",
     "APTDc_uniqueBug_sameFix": "$APTDc_{US}$",
     "APTDc_uniqueBug_uniqueFix": "$APTDc_{UU}$",
 
     "APFD_sameBug": "APFD-$FFMap_S$",
     "APFD_uniqueBug": "APFD-$FFMap_U$",
-    # "APTD_sameBug_sameFix",
-    # "APTD_sameBug_uniqueFix",
     "APTD_uniqueBug_sameFix": "$APTD_{US}$",
     "APTD_uniqueBug_uniqueFix": "$APTD_{UU}$",
-    "NRPA": "NRPA"
 }
 
 METRIC_NAMES = [
@@ -163,7 +154,6 @@ METRIC_NAMES = [
     # "APTD_sameBug_uniqueFix",
     # "APTD_uniqueBug_sameFix",
     # "APTD_uniqueBug_uniqueFix",
-    # "NRPA",
 ]
 
 COST_PREFIX = "cbt_"
@@ -183,8 +173,6 @@ FILTER_STAGEUNIQUE = "stageunique"
 FILTER_FREQFAIL = "freqfail"
 FILTER_COMBOS = [
     [FILTER_JIRA, FILTER_STAGEUNIQUE, FILTER_FREQFAIL],
-    # [FILTER_JIRA, FILTER_FREQFAIL],
-    # [FILTER_FIRST, FILTER_JIRA],
     [FILTER_FIRST, FILTER_JIRA, FILTER_STAGEUNIQUE],
     [],
 ]

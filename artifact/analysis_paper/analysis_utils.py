@@ -61,12 +61,6 @@ def read_eval_df(project, tcp, filters):
         f"{project}/{tcp}.csv.zip"))
 
 
-def read_eval_df_rebuttal(project, tcp, filters):
-    return pd.read_csv(os.path.join(
-        eval_const.evaloutcomedir, "rebuttal_d_jira_stageunique_freqfail", 
-        f"{project}/{tcp}.csv.zip"))
-
-
 def get_testing_split(project, df):
     testing_builds = pd.read_csv(os.path.join(
         eval_const.mldir, project, eval_const.ML_TESTING_SET))
@@ -93,12 +87,12 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     # tsr_multifail = tsr_multifail[tsr_multifail["num_fail_class"] >= 11][["project", "pr_name", "build_id", "stage_id"]]
     # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
 
-    # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
-    tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_fail_class"]]
-    df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
-    df = df[(df["num_fail_class"] >= df['num_fail_class'].quantile(0.76)) 
-        & (df["num_fail_class"] <= df['num_fail_class'].quantile(1))]
+    # # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
+    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omni_filter.csv")
+    # tsr_multifail = tsr_multifail[["project", "pr_name", "build_id", "stage_id", "num_fail_class"]]
+    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
+    # df = df[(df["num_fail_class"] >= df['num_fail_class'].quantile(0.76)) 
+    #     & (df["num_fail_class"] <= df['num_fail_class'].quantile(1))]
     
     # # FILTERING BASED ON CHANGE SIZE
     # change_stats = pd.read_csv("/Users/samcheng/Desktop/bigRT/evaluation/change_info/change_stats.csv")
@@ -156,7 +150,4 @@ def agg_tcp_wise_data(tcp, filters, data_type="mean"):
     return df
 
 if __name__ == "__main__":
-    # print(STAGES)
-    # agg_project_wise_means("kafka", "QTF")
-    agg_tcp_wise_data("QTF")
     pass
