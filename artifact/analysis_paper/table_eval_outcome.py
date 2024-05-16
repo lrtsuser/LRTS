@@ -54,16 +54,6 @@ def get_num_best_projects(tcps, df):
 
 def get_tukey_test_group(tcps, df):
     data = [(t, df[df["tcp"] == t]["metric"].values.tolist()) for t in tcps]
-
-    # # check for normality: most of the data is not normal, pvalue<0.001
-    # for t in data:
-    #     print("Shapiro", t[0], len(t[1]), stats.shapiro(t[1]))
-    # print("All Shapiro", stats.shapiro([item for sublist in data for item in sublist[1]]))
-
-
-    # get f-oneway
-    # print("F-oneway", stats.f_oneway(*[x[1] for x in data]).pvalue)
-
     with open("tukey.csv", "w") as f:
         f.write("tcp,score\n")
         for d in data:
@@ -77,54 +67,6 @@ def get_tukey_test_group(tcps, df):
     os.system("rm tukey.csv")
     os.system("rm tukey_group.csv")
     return groups
-
-
-    # get fridman result, all pvalue<0.001
-    print("Friedman", stats.friedmanchisquare(*[x[1] for x in data]).pvalue)
-
-    # conduct the Nemenyi post-hoc test
-    # nemenyi = sp.posthoc_nemenyi_friedman(np.array([x[1] for x in data]).T)
-    # new_names = {i: tcps[i] for i in range(len(tcps))}
-    # nemenyi = nemenyi.rename(columns=new_names, index=new_names)
-
-    pvalues = {}
-    for i, tcp1 in enumerate(tcps):
-        for j, tcp2 in enumerate(tcps):
-            assert tcp1 == data[i][0]
-            assert tcp2 == data[j][0]
-            # use tukey
-            # pvalue = stats.tukey_hsd(data[i][1], data[j][1]).pvalue[0, 1]
-            # print("tukey", i, j, tcp1, tcp2, pvalue)
-            # use nemeyi
-            # pvalue = nemenyi.loc[tcp1, tcp2]
-            pvalue = sp.posthoc_nemenyi_friedman(np.array([data[i][1], data[j][1]]).T).loc[0, 1]
-            # print("nemenyi", i, j, tcp1, tcp2, pvalue)
-            if tcp1 not in pvalues:
-                pvalues[tcp1] = {}
-            pvalues[tcp1][tcp2] = pvalue
-
-    groups = []
-    left_tcps = set(tcps)
-    for i, tcp1 in enumerate(tcps):
-        if tcp1 in left_tcps:
-            subgroups = []
-            for j, tcp2 in enumerate(left_tcps):
-                # null hypthesis is true, these two tcps are in the same group
-                pvalue = pvalues[tcp1][tcp2]
-                assert pvalues[tcp1][tcp2] == pvalues[tcp2][tcp1]
-                if pvalue > PVALUE:
-                    print(tcp2, pvalue)
-                    subgroups.append(tcp2)
-            left_tcps = left_tcps - set(subgroups)
-            groups.append(subgroups)
-
-    letters = {}
-    for i, group in enumerate(groups):
-        letter =  chr(ord('A') + i)
-        for tcp in group:
-            letters[tcp] = letter
-
-    return letters
 
 
 def assign_group_letters(tcps, groups):
@@ -232,18 +174,17 @@ def get_row_values_for_hybrid_evaluation_tables(tcp, model, data):
 
 
 def hybrid_evaluation_table_per_group(filters):
-    # basic_tcps = marco.TRAD_TCPS + marco.IR_TCPS + marco.ML_TCPS
-    # basic_tcps = list(set(basic_tcps))
+    print("computing hybrid improvement for ", marco.DATASET_MARCO['_'.join(filters)])
     models = ["", marco.COST_PREFIX, marco.HISTCOST_PREFIX]
 
     plotting_tcps = [
         (marco.TRAD_TCPS, "Traditional"),
         (marco.IR_TCPS, "IR"),
         (marco.ML_TCPS, "ML"),
-        # (marco.RL_TCPS, "RL"),
-        # (basic_tcps, "ALL")
     ]
     sorting_metric = marco.METRIC_NAMES[0]
+
+    main_table = []
 
     for tcps, group_name in plotting_tcps:
         basic_tcps = tcps.copy()
@@ -252,10 +193,10 @@ def hybrid_evaluation_table_per_group(filters):
             if model == "":
                 tcps = basic_tcps
             elif model == marco.COST_PREFIX:
-                no_cost_model_tcps = [marco.RANDOM_TCP, marco.QTF_TCP]
+                no_cost_model_tcps = [marco.RANDOM_TCP, marco.QTF_TCP, marco.QTF_AVG_TCP]
                 tcps = [model + x for x in basic_tcps if x not in no_cost_model_tcps]
             elif model == marco.HISTCOST_PREFIX:
-                no_costhist_model_tcps = [marco.RANDOM_TCP, marco.FC_TCP, marco.QTF_TCP]
+                no_costhist_model_tcps = [marco.RANDOM_TCP, marco.FC_TCP, marco.QTF_TCP, marco.QTF_AVG_TCP]
                 tcps = [model + x for x in basic_tcps if x not in no_costhist_model_tcps]
 
             df = plot_eval_outcome.collect_data(tcps, filters)
@@ -265,7 +206,6 @@ def hybrid_evaluation_table_per_group(filters):
             means = get_mean(tcps, df)
             medians = get_median(tcps, df)
             letters = get_tukey_test_group(tcps, df)
-            # letters = assign_group_letters(tcps, groups)
 
             table[model] = {"means": means, "medians": medians, "letters": letters}
 
@@ -273,25 +213,23 @@ def hybrid_evaluation_table_per_group(filters):
         tcps_order_by_basic = plot_eval_outcome.sort_tcp_by_mean(
             plot_eval_outcome.collect_data(basic_tcps, filters)[["tcp", sorting_metric]],
             sorting_metric, ascending=False)
-        rows = []
         for tcp in tcps_order_by_basic:
             basic = get_row_values_for_hybrid_evaluation_tables(tcp, "", table)
             cost = get_row_values_for_hybrid_evaluation_tables(tcp, marco.COST_PREFIX, table)
             histcost = get_row_values_for_hybrid_evaluation_tables(tcp, marco.HISTCOST_PREFIX, table)
             row = [marco.MARCOS[tcp]] + basic + cost + histcost
-            rows.append(row)
-            # convert_row_to_latex_format(row)
-        # get column wise mean
-        for row in rows:
-            print(",".join([str(x) for x in row]))
+            main_table.append(row)
+    return main_table
 
 
-def compare_over_dataset_helper(filters):
+def get_tcp_performance_on_dataset(filters):
+    print("computing basic tcp performance for dataset version", marco.DATASET_MARCO['_'.join(filters)])
     # get tcp orders for table
     all_tcps = [marco.TRAD_TCPS, marco.IR_TCPS, marco.ML_TCPS, marco.RL_TCPS]
     if marco.FILTER_FIRST in filters:
         all_tcps = [marco.TRAD_TCPS, marco.IR_TCPS]
     
+    # sorted TCPs within each TCP category
     basic_tcps = []
     sorting_metric = marco.METRIC_NAMES[0]
     for tcps in all_tcps:
@@ -299,11 +237,28 @@ def compare_over_dataset_helper(filters):
         tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
         basic_tcps += tcps
 
+    # get the performance group when considering each tcp category
+    plotting_tcps = [
+        (marco.TRAD_TCPS, "Traditional"),
+        (marco.IR_TCPS, "IR"),
+        (marco.ML_TCPS, "ML"),
+        (marco.RL_TCPS, "RL"),
+    ]
+    within_category_group = {}
+    for tcps, group_name in plotting_tcps:
+        # collect mean
+        df = plot_eval_outcome.collect_data(tcps, filters)
+        # tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
+        df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
+        letters = get_tukey_test_group(tcps, df)
+        for tcp in tcps:
+            within_category_group[marco.MARCOS[tcp]] = letters[tcp]
+
+    # get the performance group when considering all tcp
     plotting_tcps = [
         (basic_tcps, "ALL")
     ]
     table = []
-
     for tcps, group_name in plotting_tcps:
         # collect mean
         df = plot_eval_outcome.collect_data(tcps, filters)
@@ -316,7 +271,7 @@ def compare_over_dataset_helper(filters):
         for tcp in tcps:
             row = [marco.MARCOS[tcp], round(means[tcp], 3), round(medians[tcp], 3), letters[tcp]]
             table.append(row)
-    return table
+    return table, within_category_group
 
 def highlight_top_k(orders, k=5):
     ranked = sorted(orders, key=lambda x: x[1], reverse=True)
@@ -327,12 +282,11 @@ def highlight_top_k(orders, k=5):
                 orders[i] = [orders[i][0], f"\\textbf{{{orders[i][1]}}}", orders[i][2], f"\\textbf{{{orders[i][-1]}}}"]
     pass
 
-def comparsion_over_datasets():
+def tab_comparsion_over_datasets():
     print("\nExperiment Result Table Across Dataset Versions")
     meta = []
     for filters in marco.FILTER_COMBOS:
-        print("computing for dataset version", marco.DATASET_MARCO['_'.join(filters)])
-        data = compare_over_dataset_helper(filters)
+        data, _ = get_tcp_performance_on_dataset(filters)
         meta.append([filters, data])
     # sort all dataset based on the first version
     ranking = [tup[0] for tup in meta[0][1]]
@@ -352,10 +306,33 @@ def comparsion_over_datasets():
         print(f"{tcp}," + ",".join([str(x) for x in table[tcp]] + ["-"] * (6 - len(table[tcp]))))
     pass
 
+
+def tab_dataset_performance_with_hybrid_improvement(filters):
+    basic_table, within_category_group = get_tcp_performance_on_dataset(filters)
+    basic_table_dict = {row[0]: [row[1], row[-1]] for row in basic_table}
+    hybrid_table = hybrid_evaluation_table_per_group(filters)
+    hybrid_table_dict = {row[0]: [row[1], row[-1]] for row in hybrid_table}
+    header = ["TCP Techniques"]
+    header += ['Avg ' + marco.METRIC_NAMES[0], "Within Categoruy Perf Group", "Overall Perf Group"]
+    header += [marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
+               marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Improvement']
+    header += [marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
+               marco.HYBRID_MARCOS[marco.HISTCOST_PREFIX] + ' Improvement']
+    print(basic_table_dict)
+    print(hybrid_table_dict)
+    print(within_category_group)
+    print(",".join(header))
+    for row in basic_table:
+        tcp = row[0]
+        vals = [basic_table_dict[tcp][0]] + [within_category_group[tcp]] + [basic_table_dict[tcp][1]] + hybrid_table_dict.get(tcp, ['-', '-'])
+        print(",".join([str(x) for x in [tcp] + vals]))
+
+
 if __name__ == "__main__":
     # print(marco.FILTER_COMBOS[0])
     # evaluation_table(marco.FILTER_COMBOS[0])
     # evaluation_table_for_IR(marco.FILTER_COMBOS[0])
     # hybrid_evaluation_table_per_group(marco.FILTER_COMBOS[0])
-    comparsion_over_datasets()
+    # tab_comparsion_over_datasets()
+    tab_dataset_performance_with_hybrid_improvement(marco.FILTER_COMBOS[0])
     pass
