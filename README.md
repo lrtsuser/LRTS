@@ -19,8 +19,8 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 
 Go to [this link](https://drive.google.com/file/d/12gVUIUiRpR53pzI3xGMOEqBXdsDP_dYS/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
 
-## Scripts
+## Artifact
 
-`scripts` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts.
+`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts.
 
 **We are preparing and releasing our technique implement and experiment analysis code.**
