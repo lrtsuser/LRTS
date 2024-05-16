@@ -169,7 +169,7 @@ def get_diff_data(project):
 if __name__ == "__main__":
     # TOKENPOOL.check_limits()
     for project in const.PROJECTS:
-        run_get_sha_data(project)
-        get_patch_data(project)
+        # run_get_sha_data(project)
+        # get_patch_data(project)
         run_compare_two_shas(project)
         get_diff_data(project)

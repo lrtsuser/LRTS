@@ -412,7 +412,6 @@ def calculate_dataset_variant_stats():
     df.to_csv(const.DATASET_FILTER_FILE, index=False)
 
 
-
 def extract_filtered_tests_for_builds():
     """get the to be filtered tests in each filter for each build"""
     omni = pd.read_csv(const.DATASET_FILE)
