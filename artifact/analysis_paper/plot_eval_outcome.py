@@ -247,11 +247,5 @@ def plot_first_failure(filters):
 
 
 if __name__ == "__main__":
-    # vertical_box_plots(marco.TRAD_TCPS, "tradition")
-    # vertical_box_plots(marco.ML_TCPS, "ML")
-    # vertical_box_plots(marco.IR_TCPS, "IR")
-    # vertical_box_plots(marco.RL_TCPS, "RL")
     multi_vertical_box_plots(marco.FILTER_COMBOS[0])
-    # plot_trad_ml_for_generalizability(marco.FILTER_COMBOS[2])
-    # plot_first_failure(marco.FILTER_COMBOS[1])
     pass
