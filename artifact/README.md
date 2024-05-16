@@ -28,4 +28,4 @@ Run `extract_filtered_test_result.py` to create create processed test results wh
 
 ### Producing plots and figures in the evaluation section
 
-`./analysis_paper` provides scripts to produce figure and tables in our evaluation.
+`./analysis_paper` provides scripts to produce figure and tables in our evaluation. `metadata/`, `change_info/`, and `eval_outcome/` provide corresponding experiment data to run these scripts in our evaluation. 
