@@ -187,6 +187,54 @@ def extract_change_based_features(project, overwrite=True, reuse_existing_data=T
             changeinfo, file_path_dists, file_path_tok_sims, file_name_dists)
 
 
+def extract_change_stats_per_build(project, pr_name, build_id, base, head):
+    page = 1
+    fpath = os.path.join(const.shadir, project, const.COMPARE_DIR, 
+                         f"{pr_name}_build{build_id}", f"{base}_{head}_page{page}.json")
+    # num changed files, added lines, deleted lines
+    ret = {
+        "num_changed_files": 0,
+        "num_additions": 0,
+        "num_deletions": 0,
+    }
+    while os.path.exists(fpath):
+        print("loading", fpath)
+        with open(fpath, "r") as f:
+            data = json.load(f)
+            # get set of changed files
+            if "files" in data:
+                ret["num_changed_files"] += len(data["files"])
+                ret["num_additions"] += sum([x["additions"] for x in data["files"]])
+                ret["num_deletions"] += sum([x["deletions"] for x in data["files"]])
+        page += 1
+        fpath = os.path.join(const.shadir, project, const.COMPARE_DIR, 
+                        f"{pr_name}_build{build_id}", f"{base}_{head}_page{page}.json")
+
+    return [ret["num_changed_files"], ret["num_additions"], ret["num_deletions"]]
+
+
+def extract_change_stats(project):
+    """get #changed files, #lines added, and #lines deleted per change/build"""
+    df = pd.read_csv(const.DATASET_FILE)
+    df = df[df["project"] == project]
+    # all stages of the same build is on top of the same change, no need to distinguish stages here
+    df = df[["pr_name", "build_id", "trunk_sha", "build_head_sha"]].drop_duplicates().values.tolist()
+
+    data = []
+    for pr_name, build_id, base, head in df:
+        info = extract_change_stats_per_build(project, pr_name, build_id, base, head)
+        data.append([project, pr_name, build_id] + info)
+    return data
+
+
+def extract_change_stats_runner():
+    df = []
+    for project in const.PROJECTS:
+        rows = extract_change_stats(project)
+        df = df + rows
+    df = pd.DataFrame(df, columns=["project", "pr_name", "build_id", "num_changed_files", "num_addition", "num_deletion"])
+    df.to_csv(os.path.join(eval_const.changeinfodir, f"change_stats.csv"), index=False)
+
 
 if __name__ == "__main__":
     for project in const.PROJECTS:
