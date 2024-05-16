@@ -6,6 +6,9 @@ To get test features for a project, we need to have processed test results and c
 
 Run `./run.sh` to extract test features. It will create a folder `tcp_features` that stores test features per test-suite run; in `tcp_features`, `change_feature.csv` stores code change related features, `historical.csv` and `test_file_occ.csv` store test duration, outcome, (test outcome, changed file) occurance features. These features will be used by the evaluated TCP techniques listed in `eval_const.py`. 
 
+Additionally, we can run `extract_ml_data.py` to collect data for ML-based TCP techniques. Use instructions from `information_retrieval/` and `reinforcement_learning/` to collect data for IR-based and RL-based TCP techniques.  
+
+
 ### Running TCP techniques
 
 Run `python3 eval_main.py` to evaluate TCP techniques on specific projects in the dataset in test class granularity. 

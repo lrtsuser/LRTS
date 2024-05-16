@@ -306,8 +306,8 @@ def tab_controlled_experiment_ir(filters):
     ]
     sorting_metric = marco.METRIC_NAMES[0]
     for tcps, group_name in plotting_tcps:
-        print("Computing controlled experiment results for TCP category:", group_name)
-        print("Controlled Variable,<Q1,Q1-Q2,Q2-Q3,>Q3")
+        print("\nComputing controlled experiment results for TCP category:", group_name)
+        print("Controlled Variable,<=Q1,Q1-Q2,Q2-Q3,>=Q3")
         for control in analysis_utils.IR_CTRLS:
             row = [control]
             for quantiles in analysis_utils.IR_CTRL_QUANTILES:
