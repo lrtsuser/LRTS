@@ -5,3 +5,4 @@
 *.diff
 *.patch
 *.json
+__pycache__

@@ -13,8 +13,9 @@ def stage_statistics(class_df):
     # test class level pass and fail
     num_pass_class = len(class_df[class_df["outcome"] == eval_const.PASS].index)
     num_fail_class = len(class_df[class_df["outcome"] == eval_const.FAIL].index)
+    num_trans_class = (class_df["outcome"] - class_df["last_outcome"]).abs().sum()
 
-    return [stage_duration, num_pass_class, num_fail_class]
+    return [stage_duration, num_pass_class, num_fail_class, num_trans_class]
 
 
 def process_test_result(project, pr_name, build_id):
@@ -44,7 +45,7 @@ def get_omni_file():
     ret = [l for ls in ret for l in ls]
     ret = pd.DataFrame(ret, columns=[
         "project", "pr_name", "build_id", "stage_id",
-        "test_suite_duration_s", "num_pass_class", "num_fail_class",
+        "test_suite_duration_s", "num_pass_class", "num_fail_class", "num_trans_class",
     ])
     df = pd.merge(df, ret, "left", on=["project", "pr_name", "build_id"])
     

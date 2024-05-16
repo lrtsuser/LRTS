@@ -176,7 +176,7 @@ class FaultDetectionMetric:
         return sum(TF_costs) / worst_case_cost
 
 
-def realistic_metric(tests_for_fail):
+def other_metric(tests_for_fail):
     # time to first fail
     ttff = 0
     
@@ -242,7 +242,7 @@ def compute_metrics(tests, filtered_failed_tests=set(), filtered_trans_tests=set
             values[f"APTD_{bug_mapping}_{fix_mapping}"] = trans_metric.APTD()
             values[f"APTDc_{bug_mapping}_{fix_mapping}"] = trans_metric.APTDc()
 
-    ttff, ttaf, ntff, ntaf, totaltime, totaltest = realistic_metric(tests_for_fail)
+    ttff, ttaf, ntff, ntaf, totaltime, totaltest = other_metric(tests_for_fail)
     values["TTFF"] = ttff
     values["TTAF"] = ttaf
     values["NTFF"] = ntff
