@@ -13,7 +13,6 @@ local_dir = os.path.join(script_dir, "..", "analysis_paper")
 sys.path.append(parent_dir)
 sys.path.append(local_dir)
 
-import const
 import marco
 import plot_eval_outcome
 import analysis_utils
@@ -256,7 +255,7 @@ def highlight_top_k(orders, k=5):
 
 
 def tab_comparsion_over_datasets():
-    print("\nExperiment Result Table Across Dataset Versions")
+    print("\nTable: Results Across Dataset Versions")
     meta = []
     for filters in marco.FILTER_COMBOS:
         data, _ = get_tcp_performance_on_dataset(filters)
@@ -281,13 +280,11 @@ def tab_comparsion_over_datasets():
 
 
 def tab_dataset_performance_with_hybrid_improvement(filters):
-    print("\nExperiment Result Table Between Basic and Hybrid TCP Techniques on ", marco.DATASET_MARCO['_'.join(filters)])
+    print("\nTable: Results Between Basic and Hybrid TCP Techniques on ", marco.DATASET_MARCO['_'.join(filters)])
     basic_table, within_category_group = get_tcp_performance_on_dataset(filters)
     basic_table_dict = {row[0]: [row[1], row[-1]] for row in basic_table}
     hybrid_table = hybrid_evaluation_table_per_group(filters)
     hybrid_table_dict = {row[0]: row[2:] for row in hybrid_table}
-    for r in hybrid_table:
-        print(r)
     header = ["TCP Techniques"]
     header += ['Avg ' + marco.METRIC_NAMES[0], "Within Categoruy Perf Group", "Overall Perf Group"]
     header += [marco.HYBRID_MARCOS[marco.COST_PREFIX] + ' Avg ' + marco.METRIC_NAMES[0], 
@@ -300,6 +297,25 @@ def tab_dataset_performance_with_hybrid_improvement(filters):
         vals = [basic_table_dict[tcp][0]] + [within_category_group[tcp]] + [basic_table_dict[tcp][1]] + hybrid_table_dict.get(tcp, ['-'] * 4)
         print(",".join([str(x) for x in [tcp] + vals]))
 
+
+def tab_controlled_experiment_ir(filters):
+    plotting_tcps = [
+        # (marco.TIME_TCPS, "Time"),
+        # (marco.HIST_TCPS, "History"),
+        (marco.IR_TCPS, "IR"),
+    ]
+    sorting_metric = marco.METRIC_NAMES[0]
+    table = []
+    for tcps, group_name in plotting_tcps:
+        print("\n\n", group_name)
+        # collect mean
+        df = plot_eval_outcome.collect_data(tcps, filters)
+        tcps = plot_eval_outcome.sort_tcp_by_mean(df[["tcp", sorting_metric]], sorting_metric, ascending=False)
+        df = df[["tcp", sorting_metric]].rename(columns={sorting_metric: "metric"})
+        means = get_mean(tcps, df)
+        means = [x for x in means.values()]
+        print(group_name, f", {round(np.array(means).mean(), 3)}, {round(min(means), 3)}-{round(max(means), 3)}")
+    return table
 
 if __name__ == "__main__":
     # print(marco.FILTER_COMBOS[0])

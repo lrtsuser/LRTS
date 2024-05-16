@@ -39,7 +39,7 @@ def get_title(filters):
 # load stage information
 def load_stages_with_50builds():
     ret = {}
-    df = pd.read_csv(const.OMIN_FILE)
+    df = pd.read_csv(const.DATASET_FILE)
     project_stages = df[["project", "stage_id"]].drop_duplicates().values.tolist()
     for project, stage in project_stages:
         num_builds = len(df[(df["project"] == project) & (df["stage_id"] == stage)])
@@ -84,15 +84,45 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     2. get mean across stages from step 1. (we dont want one project with many stages to dominate)
     return a df of [seed, metric1, metric2, ...]
     """
-    # agg_level1 = ["pr_name", "build_id"]
+    agg_level1 = ["seed"]
+
+    df = read_eval_df(project, tcp, filters)
+    df = filter_stages(project, df)
+
+    if tcp.startswith("RL"):
+        # ML is already testing set
+        df = get_testing_split(project, df)
+    if data_type == "mean":
+        agg = df[agg_level1 + eval_const.METRIC_NAMES].groupby(
+            agg_level1).mean().reset_index()
+    elif data_type == "median":
+        agg = df[agg_level1 + eval_const.METRIC_NAMES].groupby(
+            agg_level1).median().reset_index()
+    elif data_type == None:
+        agg = df[eval_const.METRIC_NAMES]
+    agg["tcp"] = tcp
+    agg["project"] = project
+    return agg
+
+
+def agg_tcp_wise_data(tcp, filters, data_type="mean"):
+    """get seed-wise data points from all projects for a group of tcps"""
+    df = []
+    for project in const.PROJECTS:
+        df.append(agg_project_wise_data(project, tcp, filters, data_type))
+    df = pd.concat(df, axis=0)
+    return df
+
+
+def agg_project_wise_data_controlled(project, tcp, filters, data_type="mean"):
     agg_level1 = ["seed"]
 
     df = read_eval_df(project, tcp, filters)
     df = filter_stages(project, df)
     # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
-    # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
-    # tsr_multifail = tsr_multifail[tsr_multifail["num_fail_class"] >= 11][["project", "pr_name", "build_id", "stage_id"]]
-    # df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
+    tsr_multifail = pd.read_csv(const.DATASET_FILTER_FILE)
+    tsr_multifail = tsr_multifail[tsr_multifail["num_fail_class"] >= 11][["project", "pr_name", "build_id", "stage_id"]]
+    df = pd.merge(df, tsr_multifail, how="inner", on=["project", "pr_name", "build_id", "stage_id"])
 
     # # FILTERING BASED ON NUMBER OF FAILURES OF A BUILD
     # tsr_multifail = pd.read_csv("/Users/samcheng/Desktop/bigRT/metadata/omin_filter.csv")
@@ -148,11 +178,12 @@ def agg_project_wise_data(project, tcp, filters, data_type="mean"):
     return agg
 
 
-def agg_tcp_wise_data(tcp, filters, data_type="mean"):
+
+def agg_tcp_wise_data_controlled(tcp, filters, data_type="mean"):
     """get seed-wise data points from all projects for a group of tcps"""
     df = []
     for project in const.PROJECTS:
-        df.append(agg_project_wise_data(project, tcp, filters, data_type))
+        df.append(agg_project_wise_data_controlled(project, tcp, filters, data_type))
     df = pd.concat(df, axis=0)
     return df
 
