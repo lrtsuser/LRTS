@@ -9,10 +9,6 @@ sys.path.append(main_dir)
 sys.path.append(eval_dir)
 
 
-import eval_const
-import eval_metric
-
-
 def failcount(result, sc=None):
     """the number of failed test cases"""
     return float(result[0])
