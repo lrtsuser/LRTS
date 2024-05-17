@@ -6,15 +6,15 @@ To get test features for a project, we need to have processed test results and c
 
 Run `./extract_test_features.sh` to extract test features. It will create a folder `tcp_features` that stores test features per test-suite run; in `tcp_features`, `change_feature.csv` stores code change related features, `historical.csv` and `test_file_occ.csv` store test duration, outcome, (test outcome, changed file) occurance features. These features will be used by the evaluated TCP techniques listed in `eval_const.py`. 
 
-Additionally, we can run `extract_ml_data.py` to collect data for ML-based TCP techniques. Use instructions from `information_retrieval/` and `reinforcement_learning/` to collect data for IR-based and RL-based TCP techniques.  
+Additionally, we can run `extract_ml_data.py` to collect data for ML-based TCP techniques. Use instructions from `information_retrieval/` and `reinforcement_learning/` to collect data for IR-based and RL-based TCP techniques. 
 
 
 ### Running TCP techniques
 
 Run `python3 eval_main.py` to evaluate TCP techniques on specific projects in the dataset in test class granularity. 
-We can configure the evaluating techniques (variable `EVAL_TCPS`) and evaluation metrics (variable `METRIC_NAMES`) in `eval_const.py`, and configure the evaluating projects in `../const.py`. The evaluation outcome will be saved in `eval_outcome/[project]/d_[filters]/[tcp_name].csv.zip`.
+We can configure the evaluating techniques (variable `EVAL_TCPS`) and evaluation metrics (variable `METRIC_NAMES`) in `eval_const.py`, and configure the evaluating projects in `../const.py`. The evaluation outcome will be saved in `eval_outcome/[project]/d_[filters]/[tcp_name].csv.zip`. By default, all TCP techniques will be evaluated on all defined metrics under both one-to-one and many-to-one failure-to-fault mappings. 
 
-You can also specify the version of the dataset used for evaluation by applying different filters to keep or omit some of the builds that have failed tests in `eval_const.py` (variable FILTER_COMBOS). We can obtain the labeled version of the test results by running `../extract_filtered_test_result.py`. Here is description of each filter:
+We can also specify the version of the dataset used for evaluation by applying different filters to keep or omit some of the builds that have failed tests in `eval_const.py` (variable FILTER_COMBOS). We can obtain the labeled version of the test results by running `../extract_filtered_test_result.py`. Here is description of each filter:
  
 - `FILTER_FIRST` keeps the builds that have failure of test that failed for the first time throughout the collected CI history; 
 - `FILTER_JIRA` omits test failures that are due to flaky tests identified from JIRA/Github issues; 

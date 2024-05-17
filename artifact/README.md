@@ -6,7 +6,7 @@ Each sub-directory has a README that provides more information.
 ### Collecting more builds for existing projects
 
 Scripts at this directory level are used for collecting pull-request build data (test report, code change, build metadata, build log) from Jenkins CI and Github for the listed project. See `const.py` for the project list, and see `collect_builds.sh` for more description. 
-Before running the scripts, you need to add your github api tokens to `token_pool.py`. 
+Before running the scripts, we need to add usable github api token(s) to `token_pool.py`. 
 
 Then, run `./collect_builds.sh` to start collecting more PR builds (for starting, we can only include ACTIVEMQ and comment out other projects in `PROJECTS` in `const.py`). Running `collect_builds.sh` will create these folders: 
 - `metadata/` to store csv-formatted metadata of each collected PR build per project
@@ -22,9 +22,9 @@ After running `./collect_builds.sh`, we can run `python3 build_dataset.py` to cr
 
 ### Running evaluation experiments in the processed dataset
 
-`evaluation/` provides scripts to run evaluation experiments. To run experiments in the processed LRTS dataset, decompressed the downloaded dataset, move the `processed_test_result/` and `shadata/` to this folder; move the `dataset.csv` to `../metadata`. 
+`evaluation/` provides scripts to run evaluation experiments. To run experiments in the processed LRTS dataset, decompressed the downloaded dataset, move the `processed_test_result/` and `shadata/` to this folder; move the `dataset.csv` to `../metadata`. We can also collect more builds on top of existing projects in the processed LRTS dataset by simply using instructions above.
 
-Run `extract_filtered_test_result.py` to create create processed test results where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled. 
+Run `extract_filtered_test_result.py` to create create processed test results where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled, which will be used in `evaluation/`. 
 
 ### Producing plots and figures in the evaluation section
 
