@@ -326,7 +326,7 @@ def tab_controlled_experiment_ir(filters):
 
 
 if __name__ == "__main__":
-    tab_comparsion_over_datasets()
-    tab_controlled_experiment_ir(marco.FILTER_COMBOS[0])
     tab_dataset_performance_with_hybrid_improvement(marco.FILTER_COMBOS[0])
+    tab_controlled_experiment_ir(marco.FILTER_COMBOS[0])
+    tab_comparsion_over_datasets()
     pass
