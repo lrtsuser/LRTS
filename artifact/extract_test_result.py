@@ -8,16 +8,6 @@ import multiprocessing as mp
 import const
 import evaluation.eval_const as eval_const
 
-"""
-for each project, 
-- extract the running time of each test case
-- extract the running time of each test class
-- extract the current and last outcome of each test class
-
-keep the first stage execution for projects that only runs one stage per test suite
-keep all stage executions of the same build for project with multiple stages (e.g., JDK 8 and JDK 11)
-"""
-
 
 def parse_enclosing_blockname(s):
     s = "_".join(s)

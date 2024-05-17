@@ -24,11 +24,6 @@ def get_issue_link(key):
 def extract_test_from_summary(summary):
     # heuristic: extract longest word with the word `test`
     tokens = summary.split()
-    # longest_word = tokens[0]
-    # for w in tokens:
-    #     if len(w) > len(longest_word) and "test" in w.lower():
-    #         longest_word = w
-    # return longest_word
     tokens_w_test = [x for x in tokens if "test" in x.lower()]
     return tokens_w_test
 
@@ -73,22 +68,7 @@ def clean_issue(project, issue):
 
 
 def parse_github_issues(project):
-    # "project": "activemq",
-    # "flaky tests": [
-    #   "AdvisoryTests"
-    # ],
-    # "issue type": "Bug",
-    # "issue key": "AMQ-9192",
-    # "url": "https://issues.apache.org/jira/browse/AMQ-9192",
-    # "summary": "Fix flaky AdvisoryTests causing CI failures",
-    # "status": "Resolved",
-    # "resolution": "Fixed",
-    # "created": "10/Jan/23 11:28",
-    # "updated": "11/Jan/23 05:13",
-    # "created_ts": 1673378880.0,
-    # "updated_ts": 1673442780.0
-    print(project)
-    files = glob.glob("raw_data/tvm/*.json")
+    files = glob.glob(f"raw_data/{project}/*.json")
     print("number of issues", len(files))
     issues = []
     for file in files:

@@ -143,17 +143,17 @@ MARCOS = {
 METRIC_NAMES = [
     "APFDc_uniqueBug",
     "APFDc_sameBug",
-    # "APTDc_sameBug_sameFix",
-    # "APTDc_sameBug_uniqueFix",
-    # "APTDc_uniqueBug_sameFix",
-    # "APTDc_uniqueBug_uniqueFix",
+    "APTDc_sameBug_sameFix",
+    "APTDc_sameBug_uniqueFix",
+    "APTDc_uniqueBug_sameFix",
+    "APTDc_uniqueBug_uniqueFix",
 
     "APFD_uniqueBug",
     "APFD_sameBug",
-    # "APTD_sameBug_sameFix",
-    # "APTD_sameBug_uniqueFix",
-    # "APTD_uniqueBug_sameFix",
-    # "APTD_uniqueBug_uniqueFix",
+    "APTD_sameBug_sameFix",
+    "APTD_sameBug_uniqueFix",
+    "APTD_uniqueBug_sameFix",
+    "APTD_uniqueBug_uniqueFix",
 ]
 
 COST_PREFIX = "cbt_"

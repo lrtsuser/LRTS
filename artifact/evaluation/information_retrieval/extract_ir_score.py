@@ -21,12 +21,6 @@ import extract_ir_body
 
 from ir_utility import low_tokenization, tfidf_model, tfidf_score, bm25_model,  bm25_score
 
-"""
-extract data object from the test body file
-extract query object from diff body file
-tokenize them, put them into bm25 model
-"""
-
 
 def process_testbody_file(testbody_fpath):
     # read body per test, tokenization

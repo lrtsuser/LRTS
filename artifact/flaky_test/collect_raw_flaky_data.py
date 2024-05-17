@@ -20,22 +20,6 @@ keywords = ["flaky"]
 for project in const.PROJECTS:
     os.makedirs(os.path.join("data", project), exist_ok=True)
 
-def search_repo():
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    for project in const.PROJECTS:
-        print(project)
-        os.chdir(f"../evaluation/information_retrieval/repo/{project}_repo")
-        outputs = ""
-        for k in keywords:
-            try:
-                outputs += subprocess.check_output(f"grep -rli \"{k}\"", shell=True, stderr=subprocess.STDOUT).decode("utf-8")            
-                outputs += "\n"
-            except:
-                pass
-        os.chdir(current_dir)
-        with open(f"data/{project}/repo_grep_search.txt", "w") as f:
-            f.write(outputs)
-
 
 def search_issue(project):
     # https://api.github.com/search/issues?q=flaky%20repo:apache/tvm&per_page=100&page=1

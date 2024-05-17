@@ -9,12 +9,6 @@ from datetime import datetime
 
 import const
 
-"""
-collect the metadata of builds with failed tests
-pr, buildid, build duration, test suite duration, 
-pr head sha (this will be used to download zip)
-"""
-
 def get_build_head_sha(builddata, pr_name):
     actions = builddata["actions"]
     sha = None

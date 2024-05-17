@@ -19,20 +19,6 @@ import const
 import ir_const
 import eval_utils
 
-"""
-for each build,
-if there is test class change
-- checkout base
-- apply patch
-- extract test class body via file path search to get data object
-- revert patch
-- parse downloaded patch to get query
-
-if there is no test class change
-- checkout base
-- extract test class body via file path search to get data object
-- parse downloaded patch to get query
-"""
 
 def download_trunk(project):
     print("processing", project)
