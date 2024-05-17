@@ -46,87 +46,28 @@ def compute_fail_freq_for_test_classes():
     ret.to_csv(os.path.join(FFDIR, "test_fail_freq.csv"), index=False)
 
 
-def get_no_fail_test_classes():
-    project_stages = pd.read_csv(const.DATASET_FILE)
-    project_stages = project_stages[["project", "stage_id"]].drop_duplicates().values.tolist()
-    freq = {}
-    for project, stage in project_stages:
-        key = project + ",, " + stage
-        freq[key] = {}
-        # get all builds of this stage
-        testresult_csvs = glob.glob(f"{eval_const.trdir}/{project}/*/stage_{stage}/{eval_const.TEST_CLASS_CSV}")
-        print("running", project, stage, "#files", len(testresult_csvs))
-        for csv in testresult_csvs:
-            df = pd.read_csv(csv)
-            # get failed test classes
-            tests = df[["testclass", "outcome"]].values.tolist()
-            for test, outcome in tests:
-                if test not in freq[key]:
-                    freq[key][test] = 0
-                freq[key][test] += outcome
-    # construct dataframe for test class failure frequency
-    ret = []
-    for key in freq:
-        for test, num_fail in freq[key].items():
-            project, stage = key.split(",, ")
-            if num_fail == 0:
-                ret.append([project, stage, test])
-    ret = pd.DataFrame(ret, columns=["project", "stage", "test"])
-    ret.to_csv(os.path.join(FFDIR, "no_fail_test.csv"), index=False)
-
-
-def get_test_classes_exec_count():
-    """get number of times a test executed"""
-    freq = {}
-    num_tsrs = {}
+def get_failed_test_info():
+    """for each failed test, get its [project, pr_name, build_id, stage_id, failed test name, test duration,
+        test suite size, test suite duration]"""
+    data = []
     for project in const.PROJECTS:
-        freq[project] = {}
         # get all builds of this stage
-        testresult_csvs = glob.glob(f"{eval_const.trdir}/{project}/*/stage_*/{eval_const.TEST_CLASS_CSV}")
-        num_tsrs[project] = len(testresult_csvs)
+        testresult_csvs = glob.glob(f"{eval_const.trdir}/{project}/PR*/stage_*/{eval_const.TEST_CLASS_CSV}")
         print("running", project, "#files", len(testresult_csvs))
         for csv in testresult_csvs:
+            stage = csv.split('/')[-2].replace('stage_', '')
+            pr_name = csv.split('/')[-3].split('_')[0]
+            build_id = int(csv.split('/')[-3].split('_')[1].replace('build', ''))
             df = pd.read_csv(csv)
-            for test in df["testclass"].values.tolist():
-                if test not in freq[project]:
-                    freq[project][test] = 0
-                freq[project][test] += 1
-    # construct dataframe for test class failure frequency
-    ret = []
-    for project in freq:
-        for test, exec_count in freq[project].items():
-                ret.append([project, test, exec_count, num_tsrs[project]])
-    ret = pd.DataFrame(ret, columns=["project", "test", "exec_count", "test_suite_runs"])
-    ret.to_csv(os.path.join(FFDIR, "test_exec_count.csv"), index=False)
-
-
-def get_test_classes_fail_count():
-    """get number of times a test executed"""
-    freq = {}
-    num_fail_tsrs = {}
-    for project in const.PROJECTS:
-        freq[project] = {}
-        # get all builds of this stage
-        testresult_csvs = glob.glob(f"{eval_const.trdir}/{project}/*/stage_*/{eval_const.TEST_CLASS_CSV}")
-        num_fail_tsrs[project] = set()
-        print("running", project, "#files", len(testresult_csvs))
-        for csv in testresult_csvs:
-            df = pd.read_csv(csv)
-            for test, outcome in df[["testclass", "outcome"]].values.tolist():
-                if test not in freq[project]:
-                    freq[project][test] = 0
-                freq[project][test] += outcome
-                if outcome == eval_const.FAIL:
-                    num_fail_tsrs[project].add(csv)
-    # construct dataframe for test class failure frequency
-    num_fail_tsrs = {k: len(v) for k, v in num_fail_tsrs.items()}
-    
-    ret = []
-    for project in freq:
-        for test, fail_count in freq[project].items():
-                ret.append([project, test, fail_count, num_fail_tsrs[project]])
-    ret = pd.DataFrame(ret, columns=["project", "test", "fail_count", "fail_test_suite_runs"])
-    ret.to_csv(os.path.join(FFDIR, "test_fail_count.csv"), index=False)
+            test_suite_size = len(df.index)
+            test_suite_duration = df["duration"].sum()
+            failed_tests = df[df["outcome"] == eval_const.FAIL]
+            for test, duration in failed_tests[["testclass", "duration"]].values.tolist():
+                data.append([project, pr_name, build_id, stage, test, duration, test_suite_size, test_suite_duration])
+    data = pd.DataFrame(data, columns=["project", "pr_name", "build_id", "stage_id", "testclass", 
+                                       "duration", "test_suite_size", "test_suite_duration"])
+    data.to_csv(os.path.join(FFDIR, "failed_test_info.csv"), index=False)    
+    pass
 
 
 def get_outlier():
@@ -448,8 +389,6 @@ if __name__ == "__main__":
     extract_dataset_with_filterlabel()
     amend_first_failure_filter()
     calculate_dataset_variant_stats()
-    # extract_filtered_tests_for_builds()
-    # get_no_fail_test_classes()
-    # get_test_classes_exec_count()
-    # get_test_classes_fail_count()
+    extract_filtered_tests_for_builds()
+    # get_failed_test_info()
     pass
