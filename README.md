@@ -21,7 +21,7 @@ Go to [this link](https://drive.google.com/file/d/1qduPul0zLWpPNYBUV5wUOCktre6TG
 
 ## Artifact
 
-`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts.
+`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts. To run our scripts on the processed dataset above, please use instructions in the `artifact/README.md`.
 
 #### Requirement
 
