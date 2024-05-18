@@ -14,7 +14,7 @@ Additionally, we can run `extract_ml_data.py` to collect data for ML-based TCP t
 Run `python3 eval_main.py` to evaluate TCP techniques on specific projects in the dataset in test class granularity. 
 We can configure the evaluating techniques (variable `EVAL_TCPS`) and evaluation metrics (variable `METRIC_NAMES`) in `eval_const.py`, and configure the evaluating projects in `../const.py`. The evaluation outcome will be saved in `eval_outcome/[project]/d_[filters]/[tcp_name].csv.zip`. By default, all TCP techniques will be evaluated on all defined metrics under both one-to-one and many-to-one failure-to-fault mappings. 
 
-We can also specify the version of the dataset used for evaluation by applying different filters to keep or omit some of the builds that have failed tests in `eval_const.py` (variable FILTER_COMBOS). We can obtain the labeled version of the test results by running `../extract_filtered_test_result.py`. Here is description of each filter:
+We can also specify the version of the dataset used for evaluation by applying different filters to keep or omit some of the builds that have failed tests in `eval_const.py` (variable `FILTER_COMBOS`). We can obtain the labeled version of the test results by running `../extract_filtered_test_result.py`. Here is description of each filter:
  
 - `FILTER_FIRST` keeps the builds that have failure of test that failed for the first time throughout the collected CI history; 
 - `FILTER_JIRA` omits test failures that are due to flaky tests identified from JIRA/Github issues; 
