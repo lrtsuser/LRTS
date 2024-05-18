@@ -23,7 +23,7 @@ import evaluation.eval_const as eval_const
 import evaluation.eval_utils as eval_utils
 import marco
 
-os.makedirs("tables", exist_ok=True)
+os.makedirs("dataset_viz", exist_ok=True)
 
 def tab_dataset_summary():
     df = pd.read_csv(const.DATASET_FILE)
@@ -66,10 +66,74 @@ def tab_dataset_summary():
         stats.loc[idx, "Avg #Failed TC in Failed TSRs"] = int(failed["num_fail_class"].mean())
         stats.loc[idx, "Avg TSR duration (hours) in Failed TSRs"] = round(failed["test_suite_duration_s"].mean() / (60*60), 3)
 
-    fname = "tables/dataset_summary.csv"
+    fname = "dataset_viz/dataset_summary.csv"
     print(f"output to  {fname}")
     stats.to_csv(fname, index=False)
 
+
+def plot_ci_history_process_per_build(df):
+    """take average across stage"""
+    ret = df.copy()
+    ret["num_test_class"] = ret["num_pass_class"] + ret["num_fail_class"]
+    ret["test_suite_duration_s"] = ret["test_suite_duration_s"] / (60 * 60) 
+    ret = ret[["project", "pr_name", "build_id", "build_date", "test_suite_duration_s", "num_test_class"]]
+    ret = ret.groupby(["project", "pr_name", "build_id", "build_date"]).mean().reset_index()
+    ret = ret.sort_values(by=["build_date"], ascending=True)
+    return ret
+
+
+def compute_cdf(x):
+    x = np.sort(x)
+    y = 100 * np.arange(len(x)) / float(len(x))
+    return x, y
+
+
+def plot_ci_distribution():
+    """for each project, plot the change of test suite duration and size cdf"""
+    fig, main_ax = plt.subplots(nrows=2, ncols=5, figsize=(27, 6))    
+
+    duration_color = "black"
+    size_color = "grey"
+
+    dataset = pd.read_csv(const.DATASET_FILE)
+    for i, project in enumerate(const.PROJECTS):
+        ax = main_ax[i // 5, i % 5]
+        df = plot_ci_history_process_per_build(dataset[(dataset["project"] == project)])
+        y, x = compute_cdf(df["test_suite_duration_s"].values)
+        ax.plot(x, y, color=duration_color, linewidth=4)
+        ax.tick_params(axis='y', labelcolor=duration_color)
+
+        ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
+        y, x = compute_cdf(df["num_test_class"].values)
+        ax2.plot(x, y, color=size_color, linestyle="--", linewidth=4)
+        ax2.tick_params(axis='y', labelcolor=size_color)
+        for tick in ax.get_yticklabels():
+            tick.set_fontweight('bold')
+        for tick in ax2.get_yticklabels():
+            tick.set_fontweight('bold')
+
+        ax.set_title(const.PROJECT_PRETTY[project], fontsize=22)
+
+    plt.tight_layout()
+    fig.supxlabel("% CI builds", fontsize=22, y=-0.05)
+
+    # left label
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    [ax.spines[side].set_visible(False) for side in ('left', 'top', 'right', 'bottom')]
+    ax.patch.set_visible(False)
+    ax.set_ylabel('TSR duration (hours)', labelpad=30, fontsize=22, color=duration_color, fontweight='bold')
+    # right label
+    fig.supylabel("TSR size (#Test classes)", color=size_color, fontsize=22, x=1, weight='bold')
+    fig.savefig(f"dataset_viz/ci_dist.jpg", bbox_inches="tight")
+    fig.savefig(f"dataset_viz/ci_dist.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    pass
+
+
 if __name__ == "__main__":
     tab_dataset_summary()
+    plot_ci_distribution()
     pass
