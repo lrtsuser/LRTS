@@ -17,7 +17,7 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 
 ## Dataset
 
-Go to [this link](https://drive.google.com/file/d/1qduPul0zLWpPNYBUV5wUOCktre6TG3Ra/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
+Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z4kx/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
 
 ## Artifact
 

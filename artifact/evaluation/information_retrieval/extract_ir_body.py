@@ -42,7 +42,8 @@ def download_trunk(project):
     os.system("git pull")
     
     # get all branches needed for PRs
-    df = pd.read_csv(os.path.join(const.metadir, project, const.BUILDSTATS_FILE))
+    df = pd.read_csv(const.DATASET_FILE)
+    df = df[df["project"] == project]
     branches = set(df["pr_base_branch"].values.tolist())
     print("need to get branches", branches)
     for branch in branches:
@@ -93,7 +94,7 @@ def get_testclass_filepaths(testpath_file, project, tests, overwrite=True):
             data[test] = get_filepaths(project, test, allfilepaths)
         with open(testpath_file, "w") as f:
             json.dump(data, f, indent=2)
-        os.system(f"echo [BIGRT] SEARCH TIME FOR {len(tests)} TESTS: {time.time() - start}s")
+        os.system(f"echo [LRTS] SEARCH TIME FOR {len(tests)} TESTS: {time.time() - start}s")
 
 
 def get_body(paths):
@@ -117,7 +118,7 @@ def get_testclass_body(testpath_file, testbody_file):
     # dump body data
     with open(testbody_file, "w") as f:
         json.dump(data, f, indent=2)
-    os.system(f"echo [BIGRT] READ TIME FOR {len(data)} TESTS: {time.time() - start}s")
+    os.system(f"echo [LRTS] READ TIME FOR {len(data)} TESTS: {time.time() - start}s")
 
 
 def get_diff_body(diffbody_file, change_file):
@@ -152,7 +153,7 @@ def get_diff_body(diffbody_file, change_file):
 
     with open(diffbody_file, "w") as f:
         json.dump(data, f, indent=2)
-    os.system(f"echo [BIGRT] EXTRACT TIME FOR {len(change_paths)} CHANGED FILE: {time.time() - start}s")
+    os.system(f"echo [LRTS] EXTRACT TIME FOR {len(change_paths)} CHANGED FILE: {time.time() - start}s")
     pass
 
 
@@ -181,7 +182,7 @@ def extract_test_and_diff_body_per_build(project, pr_name, branch, build_id, bas
     if overwrite or not os.path.exists(testbody_file + ".gz") or not os.path.exists(diffbody_file + ".gz"):
         # get the tests
         tests = eval_utils.gather_test_classes_from_all_suites(project, pr_name, build_id)
-        os.system(f"echo [BIGRT] PROCESSING PR BUILD {project}, {pr_name}, {build_id}, {base}")
+        os.system(f"echo [LRTS] PROCESSING PR BUILD {project}, {pr_name}, {build_id}, {base}")
 
         # get the diff patch
         change_file = os.path.join(const.shadir, project, const.DIFF_DIR, f"{pr_name}_build{build_id}.diff")
@@ -191,19 +192,19 @@ def extract_test_and_diff_body_per_build(project, pr_name, branch, build_id, bas
         current_dir = os.path.dirname(os.path.realpath(__file__))
         os.chdir(repo)
 
-        os.system("echo [BIGRT] CLEAN LOCAL CHANGES, RESET TO MAIN BRANCH")
+        os.system("echo [LRTS] CLEAN LOCAL CHANGES, RESET TO MAIN BRANCH")
         os.system("git reset --hard")
         os.system("git clean -fdx")
         os.system(f"git checkout {const.PROJECT_MAIN_BRANCHES[project]}")
         
-        os.system(f"echo [BIGRT] CHECKING OUT {branch}, {base}")
+        os.system(f"echo [LRTS] CHECKING OUT {branch}, {base}")
         os.system(f"git checkout {branch}")
         os.system(f"git checkout {base}")
 
         # apply patch
-        os.system(f"echo [BIGRT] APPLYING CHANGE {change_file}")
+        os.system(f"echo [LRTS] APPLYING CHANGE {change_file}")
         os.system(f"git apply --reject --ignore-space-change --ignore-whitespace {change_file}")
-        os.system("echo [BIGRT] FINISHED APPLYING CHANGE")
+        os.system("echo [LRTS] FINISHED APPLYING CHANGE")
         
         # extract test class body via file path search
         get_testclass_filepaths(testpath_file, project, tests)
@@ -212,12 +213,12 @@ def extract_test_and_diff_body_per_build(project, pr_name, branch, build_id, bas
         get_diff_body(diffbody_file, change_file)
 
         # # revert the applied patch
-        os.system(f"echo [BIGRT] REVERSING CHANGE {change_file}")
+        os.system(f"echo [LRTS] REVERSING CHANGE {change_file}")
         # os.system(f"git apply -R --reject --ignore-space-change --ignore-whitespace {change_file}")
         os.system("git reset --hard")
         os.system("git clean -fdx")
         # # checkout to the original branch head
-        os.system(f"echo [BIGRT] CHECKING OUT MAIN BRANCH")
+        os.system(f"echo [LRTS] CHECKING OUT MAIN BRANCH")
         os.system(f"git checkout {const.PROJECT_MAIN_BRANCHES[project]}")
         os.chdir(current_dir)
 
