@@ -27,4 +27,3 @@ Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z
 
 Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`.
 
-**We are preparing and releasing our technique implement and experiment analysis code.**
