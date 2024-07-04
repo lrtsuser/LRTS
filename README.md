@@ -1,6 +1,9 @@
 # Artifact for "Revisiting Test-Case Prioritization on Long-Running Test Suites" (ISSTA 2024)
 
 
+This is the artifact README for the research paper "Revisiting Test-Case Prioritization on Long-Running Test Suites" in ISSTA 2024. 
+The "Getting Start" section provides a quick walkthrough on the general functionality (e.g., downloading and extract data from more builds, running TCP techniques) of the artifact on one of the evaluated project. To use the dataset we collected, please refer to the "Detailed Description" section.
+
 ## Getting Start
 
 
@@ -61,13 +64,15 @@ Running `collect_builds.sh` creates these folders:
 
 It will also generate `metadata/dataset_init.csv` which lists metadata for all collected PR builds.
 
-Running `python3 build_dataset.py` creates a metadata csv for the collected dataset, where each row is a test-suite run (unique by its \<project, pr_name, build_id, stage_id\> tuple).
+Running `python3 build_dataset.py` creates a metadata csv for the collected dataset, where each row is a test-suite run (unique by its \<project, pr_name, build_id, stage_id\> tuple). Note that the newly collected builds may all be passing and have not failed tests to be evaluated (see `num_fail_class` in the generated `metadata/dataset.csv`). In this case, please try another project.
 
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
+
+
 ### Evaluating on collected builds
 
-This artifact provides code that implements and runs TCP techniques in the paper on the build data we extracted.
+This artifact also provides code that implements and runs TCP techniques in the paper on the collected build data.
 
 #### Test feature collection
 
@@ -103,7 +108,7 @@ python extract_rl_data.py
 To evaluate TCP technique on the collected data, run:
 
 ```bash
-python3 eval_main.py
+python eval_main.py
 ```
 
 Evaluation results will be saved as `eval_outcome/[dataset_version]/[project_name]/[tcp_technique_name].csv.zip`, in which the columns are: project, tcp technique, PR name, build id, stage id, run seed, \[metric_value_1\], \[metric_value_2\], ..., \[metric_value_n\]. 
@@ -114,7 +119,7 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 ## Detailed Description
 
 
-We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data, please run `git restore .` to restore the evaluation outcome data before it is overwritten.
+We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data in the current repo, you need to clone a new copy of the repo to run this section.
 
 
 ### Reproducing results in the paper
