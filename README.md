@@ -5,10 +5,6 @@
 ## Getting Start
 
 
-Getting Started, to demonstrate how to set up the artifact and validate its general functionality (e.g., based on a small example) in less than 30 min.
-
-
-
 ### Artifact setup
 
 Required OS: Linux
