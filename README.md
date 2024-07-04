@@ -12,7 +12,7 @@ Start with Docker by running:
 
 ```bash
 docker pull shuaiwang516/lrts:latest
-docker run -it shuaiwang516/lrts:latest --name lrts
+docker run -it --name lrts shuaiwang516/lrts:latest
 ```
 
 ### Local setup
@@ -52,7 +52,7 @@ We will use one of the evaluated projects, `activemq`, to walk through the gener
 
 ### Collect more builds from evaluated projects
 
-We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and [Github personal access tokens](https://github.com/settings/tokens) to get a GitHub API token, and put the token in `self.tokens` in `token_pool.py`.
+We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and [Github personal access tokens](https://github.com/settings/tokens) to get a GitHub API token, and put the token in `self.tokens` in `token_pool.py` as string.
 
 To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated project, run:
 
