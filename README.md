@@ -2,11 +2,13 @@
 
 
 This README is for the artifact of the research paper "Revisiting Test-Case Prioritization on Long-Running Test Suites" in ISSTA 2024. 
-The "Getting Start" section provides a quick walkthrough on the general functionality (e.g., downloading and extracting data from more builds, running TCP techniques) of the artifact using one of the evaluated projects as an example. To use the full dataset we previously collected, please refer to the "Detailed Description" section.
+The ["Getting Start"](#getting-start) section provides a quick walkthrough on the general functionality (e.g., downloading and extracting data from more builds, running TCP techniques) of the artifact using one of the evaluated projects as an example. To use the full dataset we previously collected, please refer to the ["Detailed Description"](#detailed-description) section.
 
 ## Getting Start
 
-### Using Docker (Recommended)
+### Environment Setup
+
+#### Using Docker (Recommended)
 
 Start with Docker by running:
 
@@ -15,9 +17,9 @@ docker pull shuaiwang516/lrts:latest
 docker run -it --name lrts shuaiwang516/lrts:latest
 ```
 
-### Local setup
+#### Local setup
 
-(Skip this section if you are using Docker)
+*(Skip this section if you are using Docker)*
 
 Required OS: Linux
 
@@ -42,17 +44,17 @@ sudo apt install r-base r-base-dev -y
 R -e "install.packages('agricolae',dependencies=TRUE, repos='http://cran.rstudio.com/')"
 ```
 
-#### Specify an example project for the artifact 
+### Specify an example project for the artifact 
 
-Go to the `./artifact` folder to start running the artifact by following the steps below. 
-If you are using Docker, the default working directory is already `./artifact`.
+Go to the [`./artifact`](./artifact) folder to start running the artifact by following the steps below. \
+If you are using Docker, the default working directory is `artifact`.
 
 
-We will use one of the evaluated projects, `activemq`, to walk through the general functionality of the artifact. Go to `const.py`, locate variable `PROJECTS`, and comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
+We will use one of the evaluated projects, `activemq`, to walk through the general functionality of the artifact. Go to [`const.py`](./artifact/const.py), locate variable `PROJECTS`, and comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
 
 ### Collect more builds from evaluated projects
 
-We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and [Github personal access tokens](https://github.com/settings/tokens) to get a GitHub API token, and put the token in `self.tokens` in `token_pool.py` as string.
+We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and [Github personal access tokens](https://github.com/settings/tokens) to get a GitHub API token, and put the token in `self.tokens` in [`token_pool.py`](./artifact/token_pool.py) as a string.
 
 To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated project, run:
 
@@ -88,13 +90,13 @@ This artifact also provides code that implements and runs TCP techniques in the 
 
 #### Test feature collection
 
-To extract test features, e.g., test duration, go to the `./evaluation` folder and run:
+To extract test features, e.g., test duration, go to the [`./artifact/evaluation`](./artifact/evaluation/) folder and run:
 
 ```bash
 ./extract_test_features.sh
 ```
 
-Then, to get data for information retrieval TCP, go to `./evaluation/information_retrieval`, and run:
+Then, to get data for information retrieval TCP, go to [`./artifact/evaluation/information_retrieval`](./artifact/evaluation/information_retrieval/), and run:
 
 ```bash
 python extract_ir_body.py
@@ -109,7 +111,7 @@ python extract_ml_data.py
 ```
 
 
-To get data for reinforcement learning TCP, go to `./evaluation/reinforcement_learning`, run:
+To get data for reinforcement learning TCP, go to [`./artifact/evaluation/reinforcement_learning`](./artifact/evaluation/reinforcement_learning/), run:
 
 ```bash
 python extract_rl_data.py
@@ -131,14 +133,14 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 ## Detailed Description
 
 
-We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data in the current repo, please run `git restore .` to restore the data before it is overwritten.
+We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run [`./artifact/eval_main.py`](./artifact/evaluation/eval_main.py) which produces new evaluation outcome data in the current repo, please run `git restore .` to restore the data before it is overwritten.
 
 
 ### Reproducing results in the paper
 
 The steps below produce tables (Table 8-10) and figures (Figure 2) in the "Evaluation" section of the paper, and the dataset summary table and figure (Table 2 and Figure 1).
 
-Go to `./artifact/analysis_paper/` folder,
+Go to [`./artifact/analysis_paper/`](./artifact/analysis_paper/) folder,
 
 ```bash
 
@@ -152,8 +154,6 @@ python plot_eval_outcome.py
 #   3. the table that compares basic TCP techniques across all dataset versions (Table 10)
 # tables are printed to stdout in csv format and saved to table_eval_outcome.log
 python table_eval_outcome.py |& tee table_eval_outcome.log
-```
-
 
 # produce 
 #   1. dataset summary table (Table 2)
