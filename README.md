@@ -118,7 +118,7 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 ## Detailed Description
 
 
-We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data in the current repo, you need to clone a new copy of the repo to run this section.
+We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data in the current repo, please run `git restore .` to restore the data before it is overwritten.
 
 
 ### Reproducing results in the paper
