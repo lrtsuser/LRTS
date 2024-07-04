@@ -1,8 +1,8 @@
 # Artifact for "Revisiting Test-Case Prioritization on Long-Running Test Suites" (ISSTA 2024)
 
 
-This is the artifact README for the research paper "Revisiting Test-Case Prioritization on Long-Running Test Suites" in ISSTA 2024. 
-The "Getting Start" section provides a quick walkthrough on the general functionality (e.g., downloading and extract data from more builds, running TCP techniques) of the artifact on one of the evaluated project. To use the dataset we collected, please refer to the "Detailed Description" section.
+This README is for the artifact of the research paper "Revisiting Test-Case Prioritization on Long-Running Test Suites" in ISSTA 2024. 
+The "Getting Start" section provides a quick walkthrough on the general functionality (e.g., downloading and extracting data from more builds, running TCP techniques) of the artifact using one of the evaluated projects as an example. To use the full dataset we previously collected, please refer to the "Detailed Description" section.
 
 ## Getting Start
 
@@ -11,7 +11,7 @@ The "Getting Start" section provides a quick walkthrough on the general function
 
 Required OS: Linux
 
-Create a new conda environemnt and install artifact requirements:
+Create a new conda environment and install artifact requirements:
 
 ```bash
 # create a new conda environment
@@ -28,23 +28,22 @@ R -e "install.packages('agricolae',dependencies=TRUE, repos='http://cran.rstudio
 ```
 
 
-go to `./artifact` folder to start running the artifact by following the instructions below.
+Go to the `./artifact` folder to start running the artifact by following the steps below.
 
 
-#### Specify example project for the artifact 
+#### Specify an example project for the artifact 
 
-We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
-
+We will use one of the evaluated projects, `activemq`, to walk through the general functionality of the artifact. Go to `const.py`, locate variable `PROJECTS`, and comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
 
 
 ### Collect more builds from evaluated projects
 
-We need valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub API token. Put your token into the `token_pool.py`.
+We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub API token, and put the token in `self.tokens` in `token_pool.py`.
 
-To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated projects, run the following:
+To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated project, run:
 
 ```bash
-# run scripts to collect raw data of more builds
+# run scripts to collect raw data for more builds
 ./collect_builds.sh
 
 # gather metadata of the collected builds
@@ -64,7 +63,7 @@ Running `collect_builds.sh` creates these folders:
 
 It will also generate `metadata/dataset_init.csv` which lists metadata for all collected PR builds.
 
-Running `python3 build_dataset.py` creates a metadata csv for the collected dataset, where each row is a test-suite run (unique by its \<project, pr_name, build_id, stage_id\> tuple). Note that the newly collected builds may all be passing and have not failed tests to be evaluated (see `num_fail_class` in the generated `metadata/dataset.csv`). In this case, please try another project.
+Running `python3 build_dataset.py` creates a metadata csv for the collected dataset (`metadata/dataset.csv`), where each row is a test-suite run (unique by its \<project, pr_name, build_id, stage_id\> tuple). Note that the newly collected builds may all be passing and have not failed tests to be evaluated (see `num_fail_class` in the generated csv). In this case, please try another project.
 
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
@@ -75,7 +74,7 @@ This artifact also provides code that implements and runs TCP techniques in the 
 
 #### Test feature collection
 
-To extract test features, e.g., test duration, go to `./evaluation` folder and run:
+To extract test features, e.g., test duration, go to the `./evaluation` folder and run:
 
 ```bash
 ./extract_test_features.sh
@@ -104,13 +103,13 @@ python extract_rl_data.py
 
 #### Measure TCP technique performance
 
-To evaluate TCP technique on the collected data, run:
+To evaluate TCP techniques on the collected data, run:
 
 ```bash
 python eval_main.py
 ```
 
-Evaluation results will be saved as `eval_outcome/[dataset_version]/[project_name]/[tcp_technique_name].csv.zip`, in which the columns are: project, tcp technique, PR name, build id, stage id, run seed, \[metric_value_1\], \[metric_value_2\], ..., \[metric_value_n\]. 
+Evaluation results will be saved as `eval_outcome/[dataset_version]/[project_name]/[tcp_technique_name].csv.zip`, in which the columns are: project, TCP technique, PR name, build id, stage id, run seed, \[metric_value_1\], \[metric_value_2\], ..., \[metric_value_n\]. 
 
 There are three automatically generated `[dataset_version]`s: `d_nofilter` (corresponding to LRTS-All), `d_jira_stageunique_freqfail` (LRTS-DeConf), and `d_first_jira_stageunique` (LRTS-FirstFail).
 
@@ -123,6 +122,7 @@ We provide the evaluation outcome data in the artifact such that one can reprodu
 
 ### Reproducing results in the paper
 
+The steps below produce tables (Table 8-10) and figures (Figure 2) in the "Evaluation" section of the paper, and the dataset summary table and figure (Table 2 and Figure 1).
 
 Go to `./artifact/analysis_paper/` folder,
 
@@ -136,12 +136,12 @@ python plot_eval_outcome.py
 #   1. the table that compares the basic TCP techniques versus hybrid TCP (Table 8)
 #   2. the table that shows controlled experiment results on IR TCP (Table 9)
 #   3. the table that compares basic TCP techniques across all dataset versions (Table 10)
-# tables are print to stdout in csv format
+# tables are printed to stdout in csv format
 python table_eval_outcome.py
 
 
 # produce 
-#   1. dataset summary table as Table 3
+#   1. dataset summary table (Table 2)
 #   2. CDF plot that shows distributions of test suite duration (hours) and size per project (Figure 1)
 # results will be saved to dataset_viz/
 python viz_dataset.py
@@ -162,18 +162,18 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 - 108,366 test-suite runs from 32,199 CI builds
 - 49,674 *failed* test-suite runs (with at least one test failure) from 22,763 CI builds
 - Build history span: 2020 to 2024
-- Average test-suite run duration: 6.75 *hours*, with at least 75% runs last over 2 hours
-- Average number of executed test class per run: 980
-- Average number of failed test class per failed run: 5 
+- Average test-suite run duration: 6.75 *hours*, with at least 75% of the runs last over 2 hours
+- Average number of executed test classes per run: 980
+- Average number of failed test classes per failed run: 5 
 
 
 ### Dataset
 
-Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z4kx/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
+Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z4kx/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at the test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
 
 ### Artifact
 
-`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts. To run our scripts on the processed dataset above, please use instructions in the `artifact/README.md`.
+`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation, and experiment scripts. To run our scripts on the processed dataset above, please refer to the instructions in the `artifact/README.md`.
 
 <!-- #### Requirement
 
