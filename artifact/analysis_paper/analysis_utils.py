@@ -69,18 +69,11 @@ def read_eval_df(project, tcp, filters):
         f"{project}/{tcp}.csv.zip"))
 
 
-def read_eval_df_rebuttal(project, tcp, filters):
-    return pd.read_csv(os.path.join(
-        eval_const.evaloutcomedir, "rebuttal_d_jira_stageunique_freqfail", 
-        f"{project}/{tcp}.csv.zip"))
-
-
 def get_testing_split(project, df):
     testing_builds = pd.read_csv(os.path.join(
         eval_const.mldir, project, eval_const.ML_TESTING_SET))
     testing_builds = testing_builds[["project", "pr_name", "build_id", "stage_id"]]
     testing_df = pd.merge(testing_builds, df, "left", on=["project", "pr_name", "build_id", "stage_id"])
-    # print(project, "FULL DATASET SIZE", len(df), "TESTING SPLIT", len(testing_df))
     return testing_df
 
 

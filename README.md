@@ -69,7 +69,6 @@ Running `python3 build_dataset.py` creates a metadata csv for the collected data
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
 
-
 ### Evaluating on collected builds
 
 This artifact also provides code that implements and runs TCP techniques in the paper on the collected build data.
@@ -97,7 +96,7 @@ python extract_ml_data.py
 ```
 
 
-To get data for reinforcement learning TCP, go to `reinforcement_learning`, run:
+To get data for reinforcement learning TCP, go to `./evaluation/reinforcement_learning`, run:
 
 ```bash
 python extract_rl_data.py
