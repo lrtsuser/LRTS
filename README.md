@@ -13,8 +13,8 @@ The ["Getting Start"](#getting-start) section provides a quick walkthrough on th
 Start with Docker by running:
 
 ```bash
-docker pull shuaiwang516/lrts:latest
-docker run -it --name lrts shuaiwang516/lrts:latest
+docker pull lrts/lrts-issta-24:latest
+docker run -it --name lrts-artifact-container lrts/lrts-issta-24:latest
 ```
 
 #### Local setup
