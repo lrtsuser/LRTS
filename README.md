@@ -124,7 +124,7 @@ We provide the evaluation outcome data in the artifact such that one can reprodu
 ### Reproducing results in the paper
 
 
-Go to `analysis_paper/` folder,
+Go to `./artifact/analysis_paper/` folder,
 
 ```bash
 
@@ -147,7 +147,7 @@ python table_eval_outcome.py
 python viz_dataset.py
 ```
 
-**To use the scripts on the entire dataset we collected, please refer to the descriptions below.**
+**To download and use the full dataset we collected, please refer to the descriptions below.**
 
 
 ### The full dataset: LRTS
