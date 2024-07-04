@@ -25,14 +25,17 @@ R -e "install.packages('agricolae',dependencies=TRUE, repos='http://cran.rstudio
 ```
 
 
+go to `./artifact` folder to start running the artifact by following the instructions below.
+
+
 #### Specify example project for the artifact 
 
-We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `./const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`.
+We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`.
 
 
 ### Collect more builds from evaluated projects
 
-To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated projects, go to `./artifact` folder and run the following:
+To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated projects, run the following:
 
 ```bash
 # run scripts to collect raw data of more builds
