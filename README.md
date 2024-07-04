@@ -23,6 +23,8 @@ Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z
 
 `artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts. To run our scripts on the processed dataset above, please use instructions in the `artifact/README.md`.
 
+For the ISSTA 2024 artifact, please checkout to the `ae` branch.
+
 #### Requirement
 
 Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`.
