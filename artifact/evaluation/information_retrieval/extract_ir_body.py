@@ -80,7 +80,7 @@ def get_filepaths(project, test, allfilepaths):
     return matches
 
 
-def get_testclass_filepaths(testpath_file, project, tests, overwrite=True):
+def get_testclass_filepaths(testpath_file, project, tests, overwrite=False):
     # collect file if both the original and compressed file are missing
     if overwrite or not os.path.exists(testpath_file):
         data = {}
@@ -157,7 +157,7 @@ def get_diff_body(diffbody_file, change_file):
     pass
 
 
-def compress_file(filepath, overwrite=True):
+def compress_file(filepath, overwrite=False):
     if  overwrite or (os.path.exists(filepath) and not os.path.exists(filepath+".gz")):
         print("COMPRESSING ", filepath)
         current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -168,7 +168,7 @@ def compress_file(filepath, overwrite=True):
         os.chdir(current_dir)
 
 
-def extract_test_and_diff_body_per_build(project, pr_name, branch, build_id, base, overwrite=True):
+def extract_test_and_diff_body_per_build(project, pr_name, branch, build_id, base, overwrite=False):
     """
     extract the test class body per test class per build 
     extract change file body

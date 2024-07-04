@@ -53,7 +53,7 @@ def process_diffbody_file(diffbody_path, diff_fpath):
     return zero_context, diff, whole_file
 
 
-def get_bm25_ir_score_per_build(project, index, pr_name, build_id, overwrite=True):
+def get_bm25_ir_score_per_build(project, index, pr_name, build_id, overwrite=False):
     # file to store ir scores
     feature_build_dir = os.path.join(eval_const.feadir, project, f"{pr_name}_build{build_id}")
     os.makedirs(feature_build_dir, exist_ok=True)
@@ -88,7 +88,7 @@ def get_bm25_ir_score_per_build(project, index, pr_name, build_id, overwrite=Tru
         sys.stdout.flush()
 
 
-def get_tfidf_ir_score_per_build(project, index, pr_name, build_id, overwrite=True):
+def get_tfidf_ir_score_per_build(project, index, pr_name, build_id, overwrite=False):
     # file to store ir scores
     feature_build_dir = os.path.join(eval_const.feadir, project, f"{pr_name}_build{build_id}")
     os.makedirs(feature_build_dir, exist_ok=True)
@@ -123,7 +123,7 @@ def get_tfidf_ir_score_per_build(project, index, pr_name, build_id, overwrite=Tr
         sys.stdout.flush()
 
 
-def process_raw_ir_data_per_build(project, index, pr_name, build_id, overwrite=True):
+def process_raw_ir_data_per_build(project, index, pr_name, build_id, overwrite=False):
     """extract data object, query and tokenize them"""
     ir_build_dir = os.path.join(ir_const.irdata_dir, project, f"{pr_name}_build{build_id}")
     testbody_file = os.path.join(ir_build_dir, ir_const.TESTBODY_FILE)
