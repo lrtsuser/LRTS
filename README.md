@@ -27,7 +27,7 @@ Create a new conda environment and install artifact requirements:
 
 ```bash
 # (Optional) install conda if not installed
-curl -O https://https://mir.cs.illinois.edu/shuai/LRTS/Anaconda3-2024.06-1-Linux-x86_64.sh
+curl -O https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh
 bash Anaconda3-2024.06-1-Linux-x86_64.sh
 
 # create a new conda environment
