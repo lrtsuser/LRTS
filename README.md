@@ -30,10 +30,13 @@ go to `./artifact` folder to start running the artifact by following the instruc
 
 #### Specify example project for the artifact 
 
-We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`.
+We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
+
 
 
 ### Collect more builds from evaluated projects
+
+We need valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub API token. Put your token into the `token_pool.py`.
 
 To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated projects, run the following:
 

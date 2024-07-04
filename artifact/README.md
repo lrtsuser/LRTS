@@ -5,8 +5,8 @@ Each sub-directory has a README that provides more information.
 
 ### Collecting more builds for existing projects
 
-Scripts at this directory level are used for collecting pull-request build data (test report, code change, build metadata, build log) from Jenkins CI and Github for the listed project. See `const.py` for the project list, and see `collect_builds.sh` for more description. 
-Before running the scripts, we need to add usable github api token(s) to `token_pool.py`. 
+Scripts at this directory level are used for collecting pull-request build data (test report, code change, build metadata, build log) from Jenkins CI and GitHub for the listed project. See `const.py` for the project list, and see `collect_builds.sh` for more description. 
+Before running the scripts, we need to add usable GitHub API token(s) to `token_pool.py`. 
 
 Then, run `./collect_builds.sh` to start collecting more PR builds (for starting, we can only include ACTIVEMQ and comment out other projects in `PROJECTS` in `const.py`). Running `collect_builds.sh` will create these folders: 
 - `metadata/` to store csv-formatted metadata of each collected PR build per project
