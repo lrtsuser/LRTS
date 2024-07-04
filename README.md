@@ -1,147 +1,4 @@
-# Artifact for "Revisiting Test-Case Prioritization on Long-Running Test Suites" (ISSTA 2024)
-
-
-
-## Getting Start
-
-
-### Artifact setup
-
-Required OS: Linux
-
-Create a new conda environemnt and install artifact requirements:
-
-```bash
-# create a new conda environment
-conda create -n lrts python=3.9 -y
-conda activate lrts
-
-# install python deps
-pip install -r requirements.txt
-
-# install R deps
-sudo apt update
-sudo apt install r-base r-base-dev -y
-R -e "install.packages('agricolae',dependencies=TRUE, repos='http://cran.rstudio.com/')"
-```
-
-
-#### Specify example project for the artifact 
-
-We will use one of the evaluated projects, `activemq`, to walk through the general functionlity of the artifact. Go to `./const.py`, locate variable `PROJECTS`, comment out the other projects in `PROJECTS` except `ACTIVEMQ`.
-
-
-### Collect more builds from evaluated projects
-
-To collect data (e.g, test report, log, metadata) of more PR builds from the evaluated projects, go to `./artifact` folder and run the following:
-
-```bash
-# run scripts to collect raw data of more builds
-./collect_builds.sh
-
-# gather metadata of the collected builds
-python build_dataset.py
-
-# created dataset with confounding test labels
-python extract_filtered_test_result.py
-```
-
-Running `collect_builds.sh` creates these folders: 
-- `metadata/`: csv-formatted metadata of each collected PR build per project
-- `prdata/`: per-PR metadata in JSON
-- `shadata/`: code change info per build 
-- `testdata/`: test reports and stdout logs per build
-- `history/`: cloned codebase for the project
-- `processed_test_result/`: parsed test results, each test-suite run is stored in a `csv.zip`
-
-It will also generate `metadata/dataset_init.csv` which lists metadata for all collected PR builds.
-
-Running `python3 build_dataset.py` creates a metadata csv for the collected dataset, where each row is a test-suite run (unique by its \<project, pr_name, build_id, stage_id\> tuple).
-
-Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
-
-### Evaluating on collected builds
-
-This artifact provides code that implements and runs TCP techniques in the paper on the build data we extracted.
-
-#### Test feature collection
-
-To extract test features, e.g., test duration, go to `./evaluation` folder and run:
-
-```bash
-./extract_test_features.sh
-```
-
-Then, to get data for information retrieval TCP, go to `./evaluation/information_retrieval`, and run:
-
-```bash
-python extract_ir_body.py
-python extract_ir_score.py
-```
-
-
-To get data for supervised learning TCP (e.g., training-testing split, models), run:
-
-```bash
-python extract_ml_data.py
-```
-
-
-To get data for reinforcement learning TCP, go to `reinforcement_learning`, run:
-
-```bash
-python extract_rl_data.py
-```
-
-#### Measure TCP technique performance
-
-To evaluate TCP technique on the collected data, run:
-
-```bash
-python3 eval_main.py
-```
-
-Evaluation results will be saved as `eval_outcome/[dataset_version]/[project_name]/[tcp_technique_name].csv.zip`, in which the columns are: project, tcp technique, PR name, build id, stage id, run seed, \[metric_value_1\], \[metric_value_2\], ..., \[metric_value_n\]. 
-
-There are three automatically generated `[dataset_version]`s: `d_nofilter` (corresponding to LRTS-All), `d_jira_stageunique_freqfail` (LRTS-DeConf), and `d_first_jira_stageunique` (LRTS-FirstFail).
-
-
-## Detailed Description
-
-
-We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run `eval_main.py` which produces new evaluation outcome data, please run `git restore .` to restore the evaluation outcome data before it is overwritten.
-
-
-### Reproducing results in the paper
-
-
-Go to `analysis_paper/` folder,
-
-```bash
-
-# produce the plot that shows distribution of APFD(c) values for all techniques (Figure 2)
-# figure is saved to figures/eval-LRTS-DeConf.pdf
-python plot_eval_outcome.py
-
-# produce
-#   1. the table that compares the basic TCP techniques versus hybrid TCP (Table 8)
-#   2. the table that shows controlled experiment results on IR TCP (Table 9)
-#   3. the table that compares basic TCP techniques across all dataset versions (Table 10)
-# tables are print to stdout in csv format
-python table_eval_outcome.py
-
-
-# produce 
-#   1. dataset summary table as Table 3
-#   2. CDF plot that shows distributions of test suite duration (hours) and size per project (Figure 1)
-# results will be saved to dataset_viz/
-python viz_dataset.py
-```
-
-**To use the scripts on the entire dataset we collected, please refer to the descriptions below.**
-
-
-### The full dataset: LRTS
+# LRTS: Dataset of Long-Running Test Suites
 
 
 LRTS is the first, extensive dataset for test-case prioritization (TCP) focused on **long-running test suites**.
@@ -149,7 +6,7 @@ LRTS is the first, extensive dataset for test-case prioritization (TCP) focused 
 LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failures**, from **recent codebases** of 10 popular, large-scale, multi-PL, multi-module, **open-source software projects**: [ActiveMQ](https://github.com/apache/activemq), [Hadoop](https://github.com/apache/hadoop), [HBase](https://github.com/apache/hbase), [Hive](https://github.com/apache/hive), [Jackrabbit Oak](https://github.com/apache/jackrabbit-oak), [James](https://github.com/apache/james-project), [Kafka](https://github.com/apache/kafka), [Karaf](https://github.com/apache/karaf), [Log4j 2](https://github.com/apache/logging-log4j2), [TVM](https://github.com/apache/tvm).
 
 
-#### Key Statistics
+### Key Statistics
 - 108,366 test-suite runs from 32,199 CI builds
 - 49,674 *failed* test-suite runs (with at least one test failure) from 22,763 CI builds
 - Build history span: 2020 to 2024
@@ -158,15 +15,15 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 - Average number of failed test class per failed run: 5 
 
 
-### Dataset
+## Dataset
 
 Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z4kx/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
 
-### Artifact
+## Artifact
 
 `artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation and experiment scripts. To run our scripts on the processed dataset above, please use instructions in the `artifact/README.md`.
 
-<!-- #### Requirement
+#### Requirement
 
-Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`. -->
+Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`.
 
