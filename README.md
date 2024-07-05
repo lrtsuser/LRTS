@@ -6,7 +6,7 @@ The ["Getting Start"](#getting-start) section provides a quick walkthrough on th
 
 ## Getting Start
 
-### Environment Setup
+### Environment Setup (less than 5 minutes)
 
 #### Using Docker
 
@@ -52,7 +52,7 @@ If you are using Docker, the default working directory is `artifact`.
 
 We will use one of the evaluated projects, `activemq`, to walk through the general functionality of the artifact. Go to [`const.py`](./artifact/const.py), locate variable `PROJECTS`, and comment out the other projects in `PROJECTS` except `ACTIVEMQ`. 
 
-### Collect more builds from evaluated projects
+### Collect more builds from evaluated projects (less than 10 minutes)
 
 We need a valid GitHub API token to query some build data from GitHub. Before running the artifact, please follow the [official documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and [Github personal access tokens](https://github.com/settings/tokens) to get a GitHub API token, and put the token in `self.tokens` in [`token_pool.py`](./artifact/token_pool.py) as a string.
 
@@ -84,7 +84,7 @@ Running `python3 build_dataset.py` creates a metadata csv for the collected data
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
 
-### Evaluating TCP technique on collected builds
+### Evaluating TCP technique on collected builds (less than 10 minutes)
 
 This artifact also provides code that implements and runs TCP techniques in the paper on the collected build data.
 
@@ -96,12 +96,16 @@ To extract test features, e.g., test duration, go to the [`./artifact/evaluation
 ./extract_test_features.sh
 ```
 
+Running `extract_test_features.sh` creates test feature files in csv format (e.g., `historical.csv`) in `./artifact/evaluation/tcp_features` for each build.
+
 Then, to get data for information retrieval TCP, go to [`./artifact/evaluation/information_retrieval`](./artifact/evaluation/information_retrieval/), and run:
 
 ```bash
 python extract_ir_body.py
 python extract_ir_score.py
 ```
+
+These steps create IR data in the `/artifact/evaluation/information_retrieval/ir_data` in JSON and compressed file format.
 
 
 To get data for supervised learning TCP (e.g., training-testing split, models), run:
@@ -110,6 +114,8 @@ To get data for supervised learning TCP (e.g., training-testing split, models), 
 python extract_ml_data.py
 ```
 
+Running `extract_ml_data.py` creates training-testing dataset split, models and prediction outcomes in `./artifact/evaluation/ml_data`.
+
 
 To get data for reinforcement learning TCP, go to [`./artifact/evaluation/reinforcement_learning`](./artifact/evaluation/reinforcement_learning/), run:
 
@@ -117,7 +123,9 @@ To get data for reinforcement learning TCP, go to [`./artifact/evaluation/reinfo
 python extract_rl_data.py
 ```
 
-#### Measure TCP technique performance
+Running `extract_rl_data.py` creates RL technique results in `./artifact/evaluation/reinforcement_learning/rl_data` per \<RL model, reward, random run seed\> in compressed file format. 
+
+#### Measure TCP technique performance (less than 5 minutes)
 
 To evaluate TCP techniques on the collected data, run:
 
