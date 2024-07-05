@@ -84,11 +84,11 @@ Running `python3 build_dataset.py` creates a metadata csv for the collected data
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
 
-### Evaluating TCP technique on collected builds (less than 10 minutes)
+### Evaluating TCP technique on collected builds
 
 This artifact also provides code that implements and runs TCP techniques in the paper on the collected build data.
 
-#### Test feature collection
+#### Test feature collection (less than 10 minutes)
 
 To extract test features, e.g., test duration, go to the [`./artifact/evaluation`](./artifact/evaluation/) folder and run:
 
