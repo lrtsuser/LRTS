@@ -140,7 +140,7 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 
 ## Detailed Description
 
-To help facilitate research in software testing, e.g., test prioritization, this repository provides:
+This repository provides:
 1. steps to download and use the full dataset of Long-Running Test Suites (LRTS) we have collected
 2. scripts to collect more builds from the evaluated projects
 3. implementations of different categories of Test-Case Prioritization (TCP) algorithms (time-based, history-based, information-retrieval-based, ML-based, RL-based)
