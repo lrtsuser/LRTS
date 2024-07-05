@@ -84,7 +84,7 @@ Running `python3 build_dataset.py` creates a metadata csv for the collected data
 Running `python3 extract_filtered_test_result.py` creates processed test results in `csv.zip` format where failures of inspected flaky tests, frequently failing tests, and first failure of a test, are labeled.
 
 
-### Evaluating on collected builds
+### Evaluating TCP technique on collected builds
 
 This artifact also provides code that implements and runs TCP techniques in the paper on the collected build data.
 
@@ -132,7 +132,7 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 
 ## Detailed Description
 
-To help facilitate research in software testing, especially test prioritization, this repository provides:
+To help facilitate research in software testing, e.g., test prioritization, this repository provides:
 1. steps to download and use the full dataset of Long-Running Test Suites (LRTS) we have collected
 2. scripts to collect more builds from the evaluated projects
 3. implementations of different categories of Test-Case Prioritization (TCP) algorithms (time-based, history-based, information-retrieval-based, ML-based, RL-based)
@@ -193,7 +193,7 @@ Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z
 
 #### Artifact
 
-The [`./artifact`](./artifact) folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation, and experiment scripts. To run our scripts on the processed dataset above, please refer to the instructions in the `artifact/README.md`. They can be used the same way as described in the ["Getting Start"](#getting-start) section above.
+The [`./artifact`](./artifact) folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation, and experiment scripts. To run our scripts on the processed dataset above, please refer to more details and instructions in the `artifact/README.md`. They can be used the same way as described in the ["Getting Start"](#getting-start) section above.
 
 
 
