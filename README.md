@@ -8,7 +8,7 @@ The ["Getting Start"](#getting-start) section provides a quick walkthrough on th
 
 ### Environment Setup
 
-#### Using Docker (Recommended)
+#### Using Docker
 
 Start with Docker by running:
 
@@ -152,8 +152,8 @@ python plot_eval_outcome.py
 #   1. the table that compares the basic TCP techniques versus hybrid TCP (Table 8)
 #   2. the table that shows controlled experiment results on IR TCP (Table 9)
 #   3. the table that compares basic TCP techniques across all dataset versions (Table 10)
-# tables are printed to stdout in csv format and saved to table_eval_outcome.log
-python table_eval_outcome.py |& tee table_eval_outcome.log
+# tables are printed to stdout in csv format
+python table_eval_outcome.py
 
 # produce 
 #   1. dataset summary table (Table 2)
