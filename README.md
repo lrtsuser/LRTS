@@ -132,13 +132,18 @@ There are three automatically generated `[dataset_version]`s: `d_nofilter` (corr
 
 ## Detailed Description
 
-
-We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run [`./artifact/eval_main.py`](./artifact/evaluation/eval_main.py) which produces new evaluation outcome data in the current repo, please run `git restore .` to restore the data before it is overwritten.
+To help facilitating research in software testing, especially test prioritization, this repository provides:
+1. steps to download and use the full dataset of Long-Running Test Suites (LRTS) we have collected
+2. scripts to collect more builds from the evaluated projects
+3. implementations of different categories of Test-Case Prioritization (TCP) algorithms (time-based, history-based, information-retrieval-based, ML-based, RL-based)
+4. experiment scripts to evaluate the implemented TCP algorithms on the collected, extensible dataset
 
 
 ### Reproducing results in the paper
 
-The steps below produce tables (Table 8-10) and figures (Figure 2) in the "Evaluation" section of the paper, and the dataset summary table and figure (Table 2 and Figure 1).
+We provide the evaluation outcome data in the artifact such that one can reproduce results from the paper within a reasonable runtime. If you have run [`./artifact/eval_main.py`](./artifact/evaluation/eval_main.py) which produces new evaluation outcome data in the current repo, please run `git restore .` to restore the data before it is overwritten.
+
+The steps below produce all tables (Table 8-10) and figures (Figure 2) presented and analyzed in the "Evaluation" section of the paper, and produce the dataset summary table and figure (Table 2 and Figure 1).
 
 Go to [`./artifact/analysis_paper/`](./artifact/analysis_paper/) folder,
 
@@ -182,13 +187,15 @@ LRTS has 100K+ test-suite runs from 30K+ recent CI builds with **real test failu
 - Average number of failed test classes per failed run: 5 
 
 
-### Dataset
+#### Dataset
 
 Go to [this link](https://drive.google.com/file/d/13vnCA0tY2BMY9irfn0nV01bJnST6z4kx/view?usp=sharing) to download the processed LRTS. It contains the metadata of the dataset, test results at the test class level, and code change data of each test-suite run. We are actively looking for online storage to host the raw version which takes ~100GBs.
 
-### Artifact
+#### Artifact
 
-`artifact` folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation, and experiment scripts. To run our scripts on the processed dataset above, please refer to the instructions in the `artifact/README.md`.
+The [`./artifact`](./artifact) folder contains our code for downloading more builds from the listed projects, our TCP technique code implementation, and experiment scripts. To run our scripts on the processed dataset above, please refer to the instructions in the `artifact/README.md`. They can be used the same way as described in the ["Getting Start"](#getting-start) section above.
+
+
 
 <!-- #### Requirement
 
