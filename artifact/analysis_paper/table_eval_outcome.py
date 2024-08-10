@@ -6,7 +6,6 @@ from scipy import stats
 import scikit_posthocs as sp
 import itertools
 
-
 script_dir = os.path.dirname(__file__)
 parent_dir = os.path.join(script_dir, "..")
 local_dir = os.path.join(script_dir, "..", "analysis_paper")
@@ -52,11 +51,11 @@ def get_tukey_test_group(tcps, df):
         for d in data:
             for val in d[1]:
                 f.write(f"{d[0]},{val}\n")
-    os.system("Rscript tukey.R tukey.csv tukey_group.csv")
+    os.system("python3 tukey.py tukey.csv tukey_group.csv")
     df = pd.read_csv("tukey_group.csv")
     groups = {}
-    for idx, row in df.iterrows():
-        groups[idx] = row["groups"].upper()
+    for _, row in df.iterrows():
+        groups[row[0]] = row["groups"].upper()
     os.system("rm tukey.csv")
     os.system("rm tukey_group.csv")
     return groups
