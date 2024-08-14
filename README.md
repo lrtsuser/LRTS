@@ -21,7 +21,7 @@ docker run -it --name lrts-artifact-container lrts/lrts-issta-24:latest
 
 *(Skip this section if you are using Docker)*
 
-Required OS: Linux
+Recommended OS: Linux
 
 Create a new conda environment and install artifact requirements:
 
@@ -37,11 +37,6 @@ conda activate lrts
 
 # install python deps
 pip install -r requirements.txt
-
-# install R deps
-sudo apt update
-sudo apt install r-base r-base-dev -y
-R -e "install.packages('agricolae',dependencies=TRUE, repos='http://cran.rstudio.com/')"
 ```
 
 ### Specify an example project for the artifact 
@@ -207,4 +202,4 @@ The [`./artifact`](./artifact) folder contains our code for downloading more bui
 
 <!-- #### Requirement
 
-Install python requirement via `requirements.txt`. Install `R` and `agricolae` library on `R`. -->
+Install python requirement via `requirements.txt`. -->
