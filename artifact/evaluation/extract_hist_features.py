@@ -101,7 +101,7 @@ def build_historical_data(project):
                     history[test]["last_failure"],
                     history[test]["transition_count"],
                     history[test]["last_transition"],
-                    round(new_average, 3),
+                    round(prev_average, 3),
                     history[test]["last_duration"],
                     # history[test]["last_outcome"],
                 ])
